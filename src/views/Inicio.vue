@@ -1,13 +1,7 @@
 <template>
   <v-container>
-    <h1>Inicio</h1>
-    <p class="font-weight-black">Black text.</p>
-    <p class="font-weight-bold">Bold text.</p>
-    <p class="font-weight-medium">Medium weight text.</p>
-    <p class="font-weight-regular">Normal weight text.</p>
-    <p class="font-weight-light">Light weight text.</p>
-    <p class="font-weight-thin">Thin weight text.</p>
-    <p class="font-italic">Italic text.</p>
+    <h2 class="text-center"> <v-icon color="rojoSupizza">mdi-point-of-sale</v-icon> Caja</h2>
+    
   </v-container>
 </template>
 
