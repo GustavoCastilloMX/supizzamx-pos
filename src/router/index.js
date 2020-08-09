@@ -1,16 +1,23 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import { ifAuthenticated } from '../libs/Auth';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Inicio',
+    name: 'Home',
     component: () =>
       import(/* webpackChunkName: "inicio" */ '../views/Home.vue'),
+    beforeEnter: ifAuthenticated,
   },
-  
+  {
+    path: '/login',
+    name: 'Login',
+    component: () =>
+      import(/* webpackChunkName: "inicio" */ '../views/Login.vue'),
+  },
 ];
 
 const router = new VueRouter({

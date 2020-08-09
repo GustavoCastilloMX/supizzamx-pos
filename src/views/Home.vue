@@ -16,6 +16,12 @@
             currency-code="MXN"
           ></moneyFormat>
         </p>
+        <p v-if="cliente != ''">{{cliente.nombres}} {{cliente.apellidos}}</p>
+        <p v-if="cliente != ''">
+          <span>{{cliente.direccion.calle}}</span> <br>
+          <span>Exterior: {{cliente.direccion.numero_ext}} Interior: {{cliente.direccion.numero_int}}</span> <br>
+          <span>Colonia {{cliente.direccion.colonia}}</span>
+        </p>
       </v-col>
       <v-col cols="5">
         <v-row>
@@ -51,11 +57,18 @@
       </v-col>
     </v-row>
 
-    <client :showClient="showClient" @cancel="showClient = false" />
+    <client
+      :showClient="showClient"
+      :clients="clients"
+      @cancel="showClient = false"
+      @clientSelected="clientSelected"
+    />
   </v-container>
 </template>
 
 <script>
+import Client from "../services/Client";
+
 export default {
   name: "InicioView",
   components: {
@@ -65,6 +78,8 @@ export default {
   },
   data: () => ({
     showClient: false,
+    clients: [],
+    cliente: "",
     opciones: [
       {
         nombre: "Cliente",
@@ -145,8 +160,24 @@ export default {
       if (item == "cliente") this.addClient();
       return true;
     },
-    addClient() {
+    async addClient() {
+      if (this.clients.length == 0) await this.getClients();
       this.showClient = true;
+    },
+    async getClients() {
+      let token = localStorage.token;
+
+      try {
+        const response = await Client.getAll(token);
+        console.log(response);
+        if (response.status == 200) this.clients = response.data;
+      } catch (error) {
+        console.warn(error.data);
+      }
+    },
+    clientSelected(client) {
+      this.cliente = client;
+      this.showClient = false;
     },
   },
 };
