@@ -12,7 +12,7 @@ export default new Vuetify({
     themes: {
       light: {
         rojoSupizza: '#c02830',
-        primary: '#ee44aa',
+        primary: '#4CAF50',
         secondary: '#424242',
         accent: '#82B1FF',
         error: '#FF5252',

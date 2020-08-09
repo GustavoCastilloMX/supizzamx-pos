@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "AppBar-Component",
+  name: "AppBarComponent",
 };
 </script>
 
