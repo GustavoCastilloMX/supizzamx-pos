@@ -24,6 +24,8 @@
           <br />
           <span>Colonia {{cliente.direccion.colonia}}</span>
         </p>
+        <h4 v-if="data.nota != ''">Nota:</h4>
+        <p v-if="data.nota != ''">{{data.nota}}</p>
         <v-row>
           <v-col cols="12" v-if="pedido.length != 0">
             <v-list two-line subheader>
@@ -99,6 +101,8 @@
     />
 
     <sodas :showSodas="showSodas" @itemSelected="itemSelected" @cancel="showSodas = false" />
+
+    <note :showNote="showNote" :note="note" @saveNote="saveNote" @cancel="showNote = false" />
   </v-container>
 </template>
 
@@ -113,11 +117,13 @@ export default {
     client: () => import("../components/Base/Client"),
     complements: () => import("../components/Base/Complements"),
     sodas: () => import("../components/Base/Sodas"),
+    note: () => import("../components/Base/Note"),
   },
   data: () => ({
     showClient: false,
     showComplements: false,
     showSodas: false,
+    showNote: false,
     clients: [],
     cliente: "",
     opciones: [
@@ -195,12 +201,14 @@ export default {
       nota: "",
     },
     pedido: [],
+    note: ""
   }),
   methods: {
     click(item) {
       if (item == "cliente") this.addClient();
       if (item == "complemento") this.showComplements = true;
       if (item == "bebida") this.showSodas = true;
+      if (item == "nota") this.noteView();
       return true;
     },
     hideModal(modal) {
@@ -247,11 +255,19 @@ export default {
         e.disabled = false;
       });
     },
+    noteView() {
+      this.note = this.data.nota;
+      this.showNote = true;
+    },
     itemSelected(item) {
       this.pedido.push(item);
       this.sumarArticulos();
       this.hideModal(item.tipo);
     },
+    saveNote(note) {
+      this.data.nota = note;
+      this.showNote = false;
+    }
   },
   watch: {
     cliente: function () {
