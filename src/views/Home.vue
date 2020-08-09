@@ -97,6 +97,8 @@
       @itemSelected="itemSelected"
       @cancel="showComplements = false"
     />
+
+    <sodas :showSodas="showSodas" @itemSelected="itemSelected" @cancel="showSodas = false" />
   </v-container>
 </template>
 
@@ -110,10 +112,12 @@ export default {
       import(/* webpackChunkName: "moneyFormat" */ "vue-money-format"),
     client: () => import("../components/Base/Client"),
     complements: () => import("../components/Base/Complements"),
+    sodas: () => import("../components/Base/Sodas"),
   },
   data: () => ({
     showClient: false,
     showComplements: false,
+    showSodas: false,
     clients: [],
     cliente: "",
     opciones: [
@@ -196,12 +200,16 @@ export default {
     click(item) {
       if (item == "cliente") this.addClient();
       if (item == "complemento") this.showComplements = true;
+      if (item == "bebida") this.showSodas = true;
       return true;
     },
     hideModal(modal) {
       switch (modal) {
         case "complemento":
           this.showComplements = false;
+          break;
+        case "bebida":
+          this.showSodas = false;
           break;
       }
     },
@@ -214,6 +222,7 @@ export default {
     },
     removeItem(index) {
       this.pedido.splice(index, 1);
+      this.sumarArticulos();
     },
     async addClient() {
       if (this.clients.length == 0) await this.getClients();
