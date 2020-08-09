@@ -18,10 +18,38 @@
         </p>
         <p v-if="cliente != ''">{{cliente.nombres}} {{cliente.apellidos}}</p>
         <p v-if="cliente != ''">
-          <span>{{cliente.direccion.calle}}</span> <br>
-          <span>Exterior: {{cliente.direccion.numero_ext}} Interior: {{cliente.direccion.numero_int}}</span> <br>
+          <span>{{cliente.direccion.calle}}</span>
+          <br />
+          <span>Exterior: {{cliente.direccion.numero_ext}} Interior: {{cliente.direccion.numero_int}}</span>
+          <br />
           <span>Colonia {{cliente.direccion.colonia}}</span>
         </p>
+        <v-row>
+          <v-col cols="12" v-if="pedido.length != 0">
+            <v-list two-line subheader>
+              <v-list-item v-for="(item, index) in pedido" :key="item._id">
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.nombre"></v-list-item-title>
+                  <v-list-item-subtitle>
+                    <moneyFormat
+                      class="font-weight-medium"
+                      style="display: inline"
+                      :value="item.precio"
+                      locale="es-MX"
+                      currency-code="MXN"
+                    ></moneyFormat>
+                  </v-list-item-subtitle>
+                  <v-list-item-subtitle v-if="item.tipo == 'pizza'">Prueba 2</v-list-item-subtitle>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn icon @click="removeItem(index)">
+                    <v-icon color="red">mdi-delete</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
+          </v-col>
+        </v-row>
       </v-col>
       <v-col cols="5">
         <v-row>
@@ -63,6 +91,12 @@
       @cancel="showClient = false"
       @clientSelected="clientSelected"
     />
+
+    <complements
+      :showComplements="showComplements"
+      @itemSelected="itemSelected"
+      @cancel="showComplements = false"
+    />
   </v-container>
 </template>
 
@@ -75,9 +109,11 @@ export default {
     moneyFormat: () =>
       import(/* webpackChunkName: "moneyFormat" */ "vue-money-format"),
     client: () => import("../components/Base/Client"),
+    complements: () => import("../components/Base/Complements"),
   },
   data: () => ({
     showClient: false,
+    showComplements: false,
     clients: [],
     cliente: "",
     opciones: [
@@ -154,11 +190,30 @@ export default {
       pagado: false,
       nota: "",
     },
+    pedido: [],
   }),
   methods: {
     click(item) {
       if (item == "cliente") this.addClient();
+      if (item == "complemento") this.showComplements = true;
       return true;
+    },
+    hideModal(modal) {
+      switch (modal) {
+        case "complemento":
+          this.showComplements = false;
+          break;
+      }
+    },
+    sumarArticulos() {
+      let aux = 0;
+      this.pedido.forEach((e) => {
+        aux += e.precio;
+      });
+      this.data.total = aux;
+    },
+    removeItem(index) {
+      this.pedido.splice(index, 1);
     },
     async addClient() {
       if (this.clients.length == 0) await this.getClients();
@@ -169,7 +224,6 @@ export default {
 
       try {
         const response = await Client.getAll(token);
-        console.log(response);
         if (response.status == 200) this.clients = response.data;
       } catch (error) {
         console.warn(error.data);
@@ -178,6 +232,21 @@ export default {
     clientSelected(client) {
       this.cliente = client;
       this.showClient = false;
+    },
+    showOptions() {
+      this.opciones.forEach((e) => {
+        e.disabled = false;
+      });
+    },
+    itemSelected(item) {
+      this.pedido.push(item);
+      this.sumarArticulos();
+      this.hideModal(item.tipo);
+    },
+  },
+  watch: {
+    cliente: function () {
+      if (this.cliente != "") this.showOptions();
     },
   },
 };

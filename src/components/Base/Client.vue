@@ -59,7 +59,6 @@ export default {
         let data = client;
         let direccionAux = await this.getAddress(client._id);
         data.direccion = direccionAux[0];
-        console.log(data);
         this.$emit('clientSelected', data);
     },
     async getAddress(clientId) {
