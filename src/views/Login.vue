@@ -77,7 +77,7 @@ export default {
     mensajeError: "",
     mostrarError: false,
     user: {
-      username: "admin@mail.com",
+      username: "12345678",
       password: "12345678",
     },
   }),

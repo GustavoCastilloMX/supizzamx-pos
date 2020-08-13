@@ -76,6 +76,7 @@ export default {
     },
     selected(item) {
       item.tipo = "complemento";
+      item.cantidad = 1;
       this.$emit("itemSelected", item);
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="drawer" app mini-variant right permanent color="rojoSupizza">
+  <v-navigation-drawer v-model="drawer" app mini-variant touchless right permanent color="rojoSupizza">
     <v-list-item class="px-2">
       <v-list-item-avatar>
         <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>

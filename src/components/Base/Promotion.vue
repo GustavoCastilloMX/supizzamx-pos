@@ -1,14 +1,14 @@
 <template>
-  <v-dialog v-model="showSodas" persistent width="1200">
+  <v-dialog v-model="showPromotions" persistent max-width="800">
     <v-card>
       <v-toolbar dense flat color="rojoSupizza" dark class="mb-5">
         <v-toolbar-title class="font-weight-medium">Bebidas</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <v-row>
-          <v-col cols="3" v-for="item in items" :key="item._id">
+          <v-col cols="4" v-for="item in items" :key="item._id">
             <v-card @click="selected(item)">
-              <v-img :src="item.urlImg.very_small" height="150"></v-img>
+              <v-img :src="item.urlImg.very_small" height="120"></v-img>
               <h2 class="text-h6 font-weight-medium mt-2 ml-2">{{item.nombre}}</h2>
               <h2 class="text-h6 font-weight-medium ml-2">
                 <moneyFormat
@@ -46,7 +46,7 @@ export default {
       import(/* webpackChunkName: "moneyFormat" */ "vue-money-format"),
   },
   props: {
-    showSodas: {
+    showPromotions: {
       type: Boolean,
       required: true,
     },
@@ -75,13 +75,12 @@ export default {
       }
     },
     selected(item) {
-      item.tipo = "bebida";
-      item.cantidad = 1;
+      item.tipo = "promocion";
       this.$emit("itemSelected", item);
     },
   },
   watch: {
-    showSodas: function () {
+    showPromotions: function () {
       if (this.showSodas && this.items.length <= 0) {
         this.init();
       }

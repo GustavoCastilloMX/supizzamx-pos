@@ -1,12 +1,11 @@
 <template>
   <v-container>
-    <h2 class="text-center mb-5">
+    <h2 class="text-center mb-3">
       <v-icon color="rojoSupizza" class="pr-2">mdi-point-of-sale</v-icon>Caja
     </h2>
     <v-row>
       <v-col cols="7">
-        <h3>Pedido:</h3>
-        <p>
+        <p class="mb-2">
           <span>Total:</span>
           <moneyFormat
             class="font-weight-medium"
@@ -16,42 +15,78 @@
             currency-code="MXN"
           ></moneyFormat>
         </p>
-        <p v-if="cliente != ''">{{cliente.nombres}} {{cliente.apellidos}}</p>
-        <p v-if="cliente != ''">
-          <span>{{cliente.direccion.calle}}</span>
-          <br />
-          <span>Exterior: {{cliente.direccion.numero_ext}} Interior: {{cliente.direccion.numero_int}}</span>
-          <br />
-          <span>Colonia {{cliente.direccion.colonia}}</span>
-        </p>
-        <h4 v-if="data.nota != ''">Nota:</h4>
-        <p v-if="data.nota != ''">{{data.nota}}</p>
-        <v-row>
+        <v-card v-if="cliente != ''">
+          <v-card-title class="pb-0">{{cliente.nombres}} {{cliente.apellidos}}</v-card-title>
+          <v-card-text class="mb-0 pb-3">
+            <div>{{cliente.direccion.calle}}</div>
+            <div>Exterior: {{cliente.direccion.numero_ext}} Interior: {{cliente.direccion.numero_int}}</div>
+            <div>Colonia {{cliente.direccion.colonia}}</div>
+          </v-card-text>
+        </v-card>
+
+        <v-row class="mb-3">
           <v-col cols="12" v-if="pedido.length != 0">
-            <v-list two-line subheader>
-              <v-list-item v-for="(item, index) in pedido" :key="item._id">
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.nombre"></v-list-item-title>
-                  <v-list-item-subtitle>
-                    <moneyFormat
-                      class="font-weight-medium"
-                      style="display: inline"
-                      :value="item.precio"
-                      locale="es-MX"
-                      currency-code="MXN"
-                    ></moneyFormat>
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle v-if="item.tipo == 'pizza'">Prueba 2</v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn icon @click="removeItem(index)">
-                    <v-icon color="red">mdi-delete</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-            </v-list>
+            <v-card class="prueba" elevation="7">
+              <v-list two-line subheader color="grey lighten-5">
+                <div v-for="(item, index) in pedido" :key="item._id">
+                  <v-list-item :class="(index % 2 != 0) ? 'grey lighten-5' : 'grey lighten-4'">
+                    <v-list-item-avatar size="30" width="150" tile>
+                      <v-btn
+                        @click="itemMinus(index)"
+                        class="ma-2"
+                        :class="item.tipo == 'pizza' ? 'grey darken-1' : 'indigo'"
+                        tile
+                        dark
+                        large
+                        icon
+                        :disabled="item.tipo == 'pizza' ? true : false"
+                      >
+                        <v-icon small>mdi-minus</v-icon>
+                      </v-btn>
+                      <span class="text-center">{{ item.cantidad }}</span>
+
+                      <v-btn
+                        @click="itemPlus(index)"
+                        class="ma-2"
+                        :class="item.tipo == 'pizza' ? 'grey darken-1' : 'indigo'"
+                        tile
+                        dark
+                        large
+                        icon
+                        :disabled="item.tipo == 'pizza' ? true : false"
+                      >
+                        <v-icon small>mdi-plus</v-icon>
+                      </v-btn>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <v-list-item-title>{{item.nombre }}</v-list-item-title>
+                      <v-list-item-subtitle
+                        v-if="item.tipo == 'pizza'"
+                      >{{item.tamanos[0].nombre}} - {{getIngredients(item.ingredientes)}}</v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        <moneyFormat
+                          class="font-weight-medium"
+                          style="display: inline"
+                          :value="item.precio"
+                          locale="es-MX"
+                          currency-code="MXN"
+                        ></moneyFormat>
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-btn icon @click="removeItem(index)">
+                        <v-icon color="red">mdi-delete</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </div>
+              </v-list>
+            </v-card>
           </v-col>
         </v-row>
+        <h4 v-if="data.nota != ''" class="text-body-2 font-weight-medium">Nota:</h4>
+        <p v-if="data.nota != ''" class="text-body-2">{{data.nota}}</p>
       </v-col>
       <v-col cols="5">
         <v-row>
@@ -68,20 +103,29 @@
             </v-radio-group>
           </v-col>
 
-          <v-col cols="6" v-for="item in opciones" :key="item.nombre">
-            <v-btn
-              block
-              large
-              @click="click(item.click)"
-              class="font-weight-medium"
-              color="green"
+          <v-col
+            class="pr-0 pt-1 pb-1"
+            v-for="item in opciones"
+            :key="item.nombre"
+            :cols="item.nombre == 'Pagar' ? '12' : '6'"
+          >
+            <v-card
               :disabled="item.disabled"
+              color="indigo"
+              class="white--text"
+              @click="click(item.click)"
             >
-              <v-avatar size="35" tile class="mr-5">
-                <v-img :src="item.img"></v-img>
-              </v-avatar>
-              {{item.nombre}}
-            </v-btn>
+              <v-row>
+                <v-col cols="8" class="d-flex justify-center align-center">
+                  <h3 class="text-center font-weight-medium">{{item.nombre}}</h3>
+                </v-col>
+                <v-col cols="4">
+                  <v-avatar tile size="60">
+                    <v-img :src="item.img"></v-img>
+                  </v-avatar>
+                </v-col>
+              </v-row>
+            </v-card>
           </v-col>
         </v-row>
       </v-col>
@@ -102,6 +146,8 @@
 
     <sodas :showSodas="showSodas" @itemSelected="itemSelected" @cancel="showSodas = false" />
 
+    <pizzas :showPizzas="showPizzas" @itemSelected="itemSelected" @cancel="showPizzas = false" />
+
     <note :showNote="showNote" :note="note" @saveNote="saveNote" @cancel="showNote = false" />
   </v-container>
 </template>
@@ -118,12 +164,14 @@ export default {
     complements: () => import("../components/Base/Complements"),
     sodas: () => import("../components/Base/Sodas"),
     note: () => import("../components/Base/Note"),
+    pizzas: () => import("../components/Base/Pizzas"),
   },
   data: () => ({
     showClient: false,
     showComplements: false,
     showSodas: false,
     showNote: false,
+    showPizzas: false,
     clients: [],
     cliente: "",
     opciones: [
@@ -133,13 +181,6 @@ export default {
           "https://firebasestorage.googleapis.com/v0/b/su-pizza-mx.appspot.com/o/imagenes-administrativas%2Fclientes.svg?alt=media&token=6030af0c-3bb7-4e99-81d0-e38054abccc5",
         disabled: false,
         click: "cliente",
-      },
-      {
-        nombre: "Repartidor",
-        img:
-          "https://firebasestorage.googleapis.com/v0/b/su-pizza-mx.appspot.com/o/imagenes-administrativas%2Frepartidor.svg?alt=media&token=a254c31c-e7d4-4cdf-b4b2-e0ebc2a52f40",
-        disabled: true,
-        click: "repartidor",
       },
       {
         nombre: "Pizza",
@@ -201,14 +242,24 @@ export default {
       nota: "",
     },
     pedido: [],
-    note: ""
+    note: "",
   }),
   methods: {
+    itemMinus(index) {
+      if (this.pedido[index].cantidad <= 1) return true;
+      this.pedido[index].cantidad--;
+      this.sumarArticulos();
+    },
+    itemPlus(index) {
+      this.pedido[index].cantidad++;
+      this.sumarArticulos();
+    },
     click(item) {
       if (item == "cliente") this.addClient();
       if (item == "complemento") this.showComplements = true;
       if (item == "bebida") this.showSodas = true;
       if (item == "nota") this.noteView();
+      if (item == "pizza") this.showPizzas = true;
       return true;
     },
     hideModal(modal) {
@@ -219,12 +270,15 @@ export default {
         case "bebida":
           this.showSodas = false;
           break;
+        case "pizza":
+          this.showPizzas = false;
+          break;
       }
     },
     sumarArticulos() {
       let aux = 0;
       this.pedido.forEach((e) => {
-        aux += e.precio;
+        aux += e.precio * e.cantidad;
       });
       this.data.total = aux;
     },
@@ -243,7 +297,7 @@ export default {
         const response = await Client.getAll(token);
         if (response.status == 200) this.clients = response.data;
       } catch (error) {
-        console.warn(error.data);
+        console.warn(error.response);
       }
     },
     clientSelected(client) {
@@ -260,14 +314,38 @@ export default {
       this.showNote = true;
     },
     itemSelected(item) {
-      this.pedido.push(item);
+      let data = Object.assign({}, item);
+      let id = data._id;
+      let existe = false;
+
+      if (data.tipo != "pizza") {
+        this.pedido.forEach((e) => {
+          if (e._id == id) {
+            e.cantidad++;
+            existe = true;
+          }
+        });
+      }
+
+      if (existe == false) this.pedido.unshift(data);
       this.sumarArticulos();
       this.hideModal(item.tipo);
     },
     saveNote(note) {
       this.data.nota = note;
       this.showNote = false;
-    }
+    },
+    getIngredients(ingredients) {
+      let data = "";
+      let limit = ingredients.length - 1;
+      ingredients.forEach((e, index) => {
+        data += e.nombre;
+        if (index < limit) {
+          data += ", ";
+        }
+      });
+      return data;
+    },
   },
   watch: {
     cliente: function () {
@@ -276,3 +354,10 @@ export default {
   },
 };
 </script>
+
+<style lang="css" scoped>
+.prueba {
+  max-height: 53vh;
+  overflow-y: auto;
+}
+</style>
