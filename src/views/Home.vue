@@ -39,7 +39,7 @@
                         dark
                         large
                         icon
-                        :disabled="item.tipo == 'pizza' ? true : false"
+                        :disabled="item.tipo == 'pizza' || item.tipo == 'promocion' ? true : false"
                       >
                         <v-icon small>mdi-minus</v-icon>
                       </v-btn>
@@ -53,7 +53,7 @@
                         dark
                         large
                         icon
-                        :disabled="item.tipo == 'pizza' ? true : false"
+                        :disabled="item.tipo == 'pizza' || item.tipo == 'promocion' ? true : false"
                       >
                         <v-icon small>mdi-plus</v-icon>
                       </v-btn>
@@ -146,6 +146,12 @@
 
     <sodas :showSodas="showSodas" @itemSelected="itemSelected" @cancel="showSodas = false" />
 
+    <promotions
+      :showPromotions="showPromotions"
+      @itemSelected="itemSelected"
+      @cancel="showPromotions = false"
+    />
+
     <pizzas :showPizzas="showPizzas" @itemSelected="itemSelected" @cancel="showPizzas = false" />
 
     <note :showNote="showNote" :note="note" @saveNote="saveNote" @cancel="showNote = false" />
@@ -165,6 +171,7 @@ export default {
     sodas: () => import("../components/Base/Sodas"),
     note: () => import("../components/Base/Note"),
     pizzas: () => import("../components/Base/Pizzas"),
+    promotions: () => import("../components/Base/Promotion"),
   },
   data: () => ({
     showClient: false,
@@ -172,6 +179,7 @@ export default {
     showSodas: false,
     showNote: false,
     showPizzas: false,
+    showPromotions: false,
     clients: [],
     cliente: "",
     opciones: [
@@ -260,6 +268,7 @@ export default {
       if (item == "bebida") this.showSodas = true;
       if (item == "nota") this.noteView();
       if (item == "pizza") this.showPizzas = true;
+      if (item == "promocion") this.showPromotions = true;
       return true;
     },
     hideModal(modal) {
@@ -272,6 +281,9 @@ export default {
           break;
         case "pizza":
           this.showPizzas = false;
+          break;
+        case "promocion":
+          this.showPromotions = false;
           break;
       }
     },

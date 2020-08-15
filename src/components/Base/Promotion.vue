@@ -2,7 +2,7 @@
   <v-dialog v-model="showPromotions" persistent max-width="800">
     <v-card>
       <v-toolbar dense flat color="rojoSupizza" dark class="mb-5">
-        <v-toolbar-title class="font-weight-medium">Bebidas</v-toolbar-title>
+        <v-toolbar-title class="font-weight-medium">Promociones</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <v-row>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import Soda from "../../services/Soda";
+import Promotion from "../../services/Promotion";
 
 export default {
   name: "SodasComponent",
@@ -53,6 +53,15 @@ export default {
   },
   data: () => ({
     overlay: false,
+    days: [
+      "Domingo",
+      "Lunes",
+      "Martes",
+      "Miercoles",
+      "Jueves",
+      "Viernes",
+      "Sabado",
+    ],
     items: [],
   }),
   methods: {
@@ -66,22 +75,24 @@ export default {
     },
     async getItems() {
       let token = localStorage.token;
+      let day = new Date().getDay();
 
       try {
-        const response = await Soda.getAll(token);
+        const response = await Promotion.get(token, this.days[day]);
         if ((response.status = 200)) this.items = response.data;
       } catch (error) {
         console.warn(error.data);
       }
     },
     selected(item) {
+      item.cantidad = 1;
       item.tipo = "promocion";
       this.$emit("itemSelected", item);
     },
   },
   watch: {
     showPromotions: function () {
-      if (this.showSodas && this.items.length <= 0) {
+      if (this.showPromotions) {
         this.init();
       }
     },
