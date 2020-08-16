@@ -6,4 +6,9 @@ export default {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+  async getByPrice(token, price) {
+    return await Service.get(`bebidas/${price}/precio`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 };

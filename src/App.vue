@@ -17,7 +17,10 @@ export default {
       import(
         /* webpackChunkName: "AppBarComponent" */ "./components/Menu/AppBar"
       ),
-      NavigationDrawer: () => import(/* webpackChunkName: "NavigationDrawerComponent" */"./components/Menu/NavigationDrawer")
+    NavigationDrawer: () =>
+      import(
+        /* webpackChunkName: "NavigationDrawerComponent" */ "./components/Menu/NavigationDrawer"
+      ),
   },
 
   data: () => ({
@@ -25,3 +28,32 @@ export default {
   }),
 };
 </script>
+
+
+
+
+Llamada a la  base de datos de todos tus puntos 
+
+
+localizacionCamion 10s
+
+snapShot(coordenadas) {
+  function moverMarcador
+  function calcularTiempo
+}
+
+socket(coordenadas) {
+  function moverMarcador
+  function calcularTiempo
+}
+
+
+localizacion
+
+
+
+function drawMarkers() {
+  getAllPoints().forEach(e => {
+    L.marker([e.latidud, e.longitud],
+  })
+}

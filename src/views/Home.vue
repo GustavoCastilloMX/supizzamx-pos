@@ -74,6 +74,11 @@
                         ></moneyFormat>
                       </v-list-item-subtitle>
                     </v-list-item-content>
+                    <v-list-item-action v-if="item.tipo == 'promocion' && item.bebidas.length > 0">
+                      <v-btn icon @click="sodaChange(index)">
+                        <v-icon color="green">mdi-playlist-edit</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
                     <v-list-item-action>
                       <v-btn icon @click="removeItem(index)">
                         <v-icon color="red">mdi-delete</v-icon>
@@ -146,6 +151,13 @@
 
     <sodas :showSodas="showSodas" @itemSelected="itemSelected" @cancel="showSodas = false" />
 
+    <editSoda
+      :showSodasEdit="showSodasEdit"
+      :data="sodaData"
+      @sodaChanged="sodaChanged"
+      @cancel="showSodasEdit = false"
+    />
+
     <promotions
       :showPromotions="showPromotions"
       @itemSelected="itemSelected"
@@ -172,6 +184,7 @@ export default {
     note: () => import("../components/Base/Note"),
     pizzas: () => import("../components/Base/Pizzas"),
     promotions: () => import("../components/Base/Promotion"),
+    editSoda: () => import("../components/Base/SodasEdit"),
   },
   data: () => ({
     showClient: false,
@@ -180,6 +193,8 @@ export default {
     showNote: false,
     showPizzas: false,
     showPromotions: false,
+    showSodasEdit: false,
+    sodaData: {},
     clients: [],
     cliente: "",
     opciones: [
@@ -269,6 +284,7 @@ export default {
       if (item == "nota") this.noteView();
       if (item == "pizza") this.showPizzas = true;
       if (item == "promocion") this.showPromotions = true;
+      if (item == "pagar") this.pay();
       return true;
     },
     hideModal(modal) {
@@ -357,6 +373,47 @@ export default {
         }
       });
       return data;
+    },
+    sodaChange(index) {
+      this.sodaData = {
+        index,
+        price: this.pedido[index].bebidas[0].precio,
+        limit: this.pedido[index].bebidas.length,
+      };
+      this.showSodasEdit = true;
+    },
+    sodaChanged(data) {
+      this.pedido[data.index].bebidas = data.sodas;
+      this.showSodasEdit = false;
+    },
+    pay() {
+      let data = {
+        tipo: "Panel",
+        status: "Completado",
+        entrega: this.data.entrega,
+        fecha: new Date(),
+        cliente: this.cliente._id,
+        repartidor: this.cliente.direccion._id,
+        pizzas: [],
+        promos: [],
+        bebidas: [],
+        complementos: [],
+        direccion: this.cliente.direccion._id,
+        forma_pago: "Efectivo",
+        total: this.data.total,
+        pagado: true,
+        nota: this.data.nota,
+      };
+
+      this.pedido.forEach(e => {
+        if(e.tipo == 'pizza') data.pizzas.push(e);
+        if(e.tipo == 'promocion') data.promos.push(e);
+        if(e.tipo == 'bebida') data.bebidas.push(e);
+        if(e.tipo == 'complemento') data.complementos.push(e);
+      })
+
+      console.log(data);
+      console.log("PAGAAAAR");
     },
   },
   watch: {
