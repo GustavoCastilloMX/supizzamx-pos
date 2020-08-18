@@ -5,7 +5,17 @@
         <v-toolbar-title class="font-weight-medium">Clientes</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
-        <v-data-table :headers="headers" :items="clients" class="elevation-1">
+        <v-text-field
+          class="mb-3"
+          outlined
+          dense
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Buscar cliente"
+          single-line
+          hide-details
+        ></v-text-field>
+        <v-data-table :headers="headers" :items="clients" :search="search" class="elevation-5">
           <template v-slot:item.seleccionar="{ item }">
             <v-btn depressed color="green" @click="seleccionar(item)" dark>Seleccionar</v-btn>
           </template>
@@ -23,7 +33,6 @@
 </template>
 
 <script>
-
 import Address from "../../services/Address";
 
 export default {
@@ -47,30 +56,30 @@ export default {
       { text: "Apellidos", value: "apellidos" },
       { text: "Teléfono", value: "telefono" },
       { text: "Email", value: "mail" },
-      { text: "Actions", value: "actions", sortable: false },
       { text: "Seleccionar", value: "seleccionar", sortable: false },
     ],
+    search: "",
   }),
   methods: {
     cancel() {
       this.$emit("cancel");
     },
     async seleccionar(client) {
-        let data = client;
-        let direccionAux = await this.getAddress(client._id);
-        data.direccion = direccionAux[0];
-        this.$emit('clientSelected', data);
+      let data = client;
+      let direccionAux = await this.getAddress(client._id);
+      data.direccion = direccionAux[0];
+      this.$emit("clientSelected", data);
     },
     async getAddress(clientId) {
-        let token = localStorage.token;
+      let token = localStorage.token;
 
-        try {
-            const response = await Address.get(token, clientId);
-            return response.data;
-        } catch (error) {
-            console.warn(error.data);
-        }
-    }
+      try {
+        const response = await Address.get(token, clientId);
+        return response.data;
+      } catch (error) {
+        console.warn(error.data);
+      }
+    },
   },
 };
 </script>

@@ -172,6 +172,7 @@
 
 <script>
 import Client from "../services/Client";
+import Sale from "../services/Sale";
 
 export default {
   name: "InicioView",
@@ -386,7 +387,7 @@ export default {
       this.pedido[data.index].bebidas = data.sodas;
       this.showSodasEdit = false;
     },
-    pay() {
+    async pay() {
       let data = {
         tipo: "Panel",
         status: "Completado",
@@ -405,15 +406,22 @@ export default {
         nota: this.data.nota,
       };
 
-      this.pedido.forEach(e => {
-        if(e.tipo == 'pizza') data.pizzas.push(e);
-        if(e.tipo == 'promocion') data.promos.push(e);
-        if(e.tipo == 'bebida') data.bebidas.push(e);
-        if(e.tipo == 'complemento') data.complementos.push(e);
-      })
+      this.pedido.forEach((e) => {
+        if (e.tipo == "pizza") data.pizzas.push(e);
+        if (e.tipo == "promocion") data.promos.push(e);
+        if (e.tipo == "bebida") data.bebidas.push(e);
+        if (e.tipo == "complemento") data.complementos.push(e);
+      });
 
       console.log(data);
-      console.log("PAGAAAAR");
+      let token = localStorage.token;
+
+      try {
+        const response = await Sale.setSale(token, data);
+        console.log(response);
+      } catch (error) {
+        console.warn(error.response);
+      }
     },
   },
   watch: {
