@@ -388,7 +388,27 @@ export default {
       this.showSodasEdit = false;
     },
     async pay() {
-      let data = {
+      console.log(this.data.entrega);
+
+      // this.pedido.forEach((e) => {
+      //   if (e.tipo == "pizza") data.pizzas.push(e);
+      //   if (e.tipo == "promocion") data.promos.push(e);
+      //   if (e.tipo == "bebida") data.bebidas.push(e);
+      //   if (e.tipo == "complemento") data.complementos.push(e);
+      // });
+
+      // console.log(data);
+      // let token = localStorage.token;
+
+      // try {
+      //   const response = await Sale.setSale(token, data);
+      //   console.log(response);
+      // } catch (error) {
+      //   console.warn(error.response);
+      // }
+    },
+    recuperarPedido(status, repartidor, formaDePago) {
+      return {
         tipo: "Panel",
         status: "Completado",
         entrega: this.data.entrega,
@@ -405,23 +425,6 @@ export default {
         pagado: true,
         nota: this.data.nota,
       };
-
-      this.pedido.forEach((e) => {
-        if (e.tipo == "pizza") data.pizzas.push(e);
-        if (e.tipo == "promocion") data.promos.push(e);
-        if (e.tipo == "bebida") data.bebidas.push(e);
-        if (e.tipo == "complemento") data.complementos.push(e);
-      });
-
-      console.log(data);
-      let token = localStorage.token;
-
-      try {
-        const response = await Sale.setSale(token, data);
-        console.log(response);
-      } catch (error) {
-        console.warn(error.response);
-      }
     },
   },
   watch: {
