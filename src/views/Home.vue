@@ -167,12 +167,31 @@
     <pizzas :showPizzas="showPizzas" @itemSelected="itemSelected" @cancel="showPizzas = false" />
 
     <note :showNote="showNote" :note="note" @saveNote="saveNote" @cancel="showNote = false" />
+
+    <wayToPay
+      :showToPay="showToPay"
+      @cancel="showToPay = false"
+      @pagar="pagar"
+      @cortesia="cortesia"
+    />
+
+    <repartidores
+      :showRepartidores="showRepartidores"
+      :data="repartidores"
+      @envioDomicilio="envioDomicilio"
+      @cancel="showRepartidores = false"
+    />
+
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
 <script>
 import Client from "../services/Client";
 import Sale from "../services/Sale";
+import DeliveryMen from "../services/DeliveryMen";
 
 export default {
   name: "InicioView",
@@ -186,8 +205,11 @@ export default {
     pizzas: () => import("../components/Base/Pizzas"),
     promotions: () => import("../components/Base/Promotion"),
     editSoda: () => import("../components/Base/SodasEdit"),
+    wayToPay: () => import("../components/Base/WayToPay"),
+    repartidores: () => import("../components/Base/Repartidores"),
   },
   data: () => ({
+    overlay: false,
     showClient: false,
     showComplements: false,
     showSodas: false,
@@ -195,6 +217,8 @@ export default {
     showPizzas: false,
     showPromotions: false,
     showSodasEdit: false,
+    showToPay: false,
+    showRepartidores: false,
     sodaData: {},
     clients: [],
     cliente: "",
@@ -267,6 +291,7 @@ export default {
     },
     pedido: [],
     note: "",
+    repartidores: [],
   }),
   methods: {
     itemMinus(index) {
@@ -338,6 +363,12 @@ export default {
         e.disabled = false;
       });
     },
+    hideOptions() {
+      this.data.entrega = "Sucursal";
+      this.opciones.forEach((e) => {
+        if (e.nombre != "Cliente") e.disabled = true;
+      });
+    },
     noteView() {
       this.note = this.data.nota;
       this.showNote = true;
@@ -388,54 +419,161 @@ export default {
       this.showSodasEdit = false;
     },
     async pay() {
-      console.log(this.data.entrega);
+      if (this.data.entrega == "Domicilio") {
+        await this.getRepartidores();
+        this.showRepartidores = true;
 
-      // this.pedido.forEach((e) => {
-      //   if (e.tipo == "pizza") data.pizzas.push(e);
-      //   if (e.tipo == "promocion") data.promos.push(e);
-      //   if (e.tipo == "bebida") data.bebidas.push(e);
-      //   if (e.tipo == "complemento") data.complementos.push(e);
-      // });
+        return true;
+      }
 
-      // console.log(data);
-      // let token = localStorage.token;
+      if (this.pedido.length <= 0) {
+        this.mesajeError();
+        return;
+      }
 
-      // try {
-      //   const response = await Sale.setSale(token, data);
-      //   console.log(response);
-      // } catch (error) {
-      //   console.warn(error.response);
-      // }
+      this.showToPay = true;
     },
-    recuperarPedido(status, repartidor, formaDePago) {
+    async getRepartidores() {
+      this.overlay = true;
+      let token = localStorage.token;
+
+      try {
+        const response = await DeliveryMen.getAll(token);
+        if (response.status == 200) this.repartidores = response.data;
+      } catch (error) {
+        console.warn(error.response);
+      } finally {
+        this.overlay = false;
+      }
+    },
+    async envioDomicilio(id) {
+      this.overlay = true;
+      this.showRepartidores = false;
+      let data = await this.recuperarPedido("En ruta", id, "Efectivo", false);
+
+      // Rellenar el pedido
+      this.pedido.forEach((e) => {
+        if (e.tipo == "pizza") data.pizzas.push(e);
+        if (e.tipo == "promocion") data.promos.push(e);
+        if (e.tipo == "bebida") data.bebidas.push(e);
+        if (e.tipo == "complemento") data.complementos.push(e);
+      });
+
+      this.enviarPago(data);
+    },
+    recuperarPedido(status, repartidor, formaDePago, pagado) {
       return {
         tipo: "Panel",
-        status: "Completado",
+        status: status,
         entrega: this.data.entrega,
         fecha: new Date(),
         cliente: this.cliente._id,
-        repartidor: this.cliente.direccion._id,
+        repartidor: repartidor,
         pizzas: [],
         promos: [],
         bebidas: [],
         complementos: [],
         direccion: this.cliente.direccion._id,
-        forma_pago: "Efectivo",
+        forma_pago: formaDePago,
         total: this.data.total,
-        pagado: true,
+        pagado: pagado,
         nota: this.data.nota,
       };
+    },
+    mesajeError() {
+      this.$swal({
+        icon: "error",
+        title: `<h2 style="font-family: 'Open Sans', sans-serif;">Oops...</h2>`,
+        html: `<span style="font-family: 'Open Sans', sans-serif;">Selecciona al menos un producto para poder generar la venta.</span>`,
+        confirmButtonText: `<span style="font-family: 'Open Sans', sans-serif;">Ok!</span>`,
+      });
+    },
+    async pagar(tipo) {
+      this.overlay = true;
+      this.showToPay = false;
+      let data;
+
+      if (tipo == "Pago pendiente") {
+        data = await this.recuperarPedido(tipo, null, tipo, false);
+      }
+
+      if (tipo != "Pago pendiente") {
+        data = await this.recuperarPedido("Completado", null, tipo, true);
+      }
+
+      // Rellenar el pedido
+      this.pedido.forEach((e) => {
+        if (e.tipo == "pizza") data.pizzas.push(e);
+        if (e.tipo == "promocion") data.promos.push(e);
+        if (e.tipo == "bebida") data.bebidas.push(e);
+        if (e.tipo == "complemento") data.complementos.push(e);
+      });
+
+      this.enviarPago(data);
+    },
+    async enviarPago(pedido) {
+      let token = localStorage.token;
+      try {
+        const response = await Sale.setSale(token, pedido);
+        if (response.status == 200) {
+          this.$swal({
+            icon: "success",
+            title: `<h2 style="font-family: 'Open Sans'">Compra finalizada</h2>`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+
+          this.cliente = "";
+          this.total = 0;
+          this.pedido = [];
+          this.note = "";
+          this.data.total = 0;
+          this.data.nota = "";
+          this.cliente = "";
+        }
+        console.log(response);
+      } catch (error) {
+        console.warn(error.response);
+      } finally {
+        this.overlay = false;
+      }
+    },
+    async cortesia(data) {
+      this.overlay = true;
+      this.showToPay = false;
+      let tipo;
+
+      console.log(data);
+      if (data.empleado == "") tipo = "Cortesia";
+      if (data.empleado != "") tipo = "Cortesia empleado";
+
+      let pedido = await this.recuperarPedido("Completado", null, tipo, false);
+
+      // Rellenar el pedido
+      this.pedido.forEach((e) => {
+        if (e.tipo == "pizza") pedido.pizzas.push(e);
+        if (e.tipo == "promocion") pedido.promos.push(e);
+        if (e.tipo == "bebida") pedido.bebidas.push(e);
+        if (e.tipo == "complemento") pedido.complementos.push(e);
+      });
+
+      console.warn(pedido);
+      pedido.empleado = data.empleado;
+      pedido.supervisor = data.supervisor;
+
+      await this.enviarPago(pedido);
     },
   },
   watch: {
     cliente: function () {
       if (this.cliente != "") this.showOptions();
+      if (this.cliente == "") this.hideOptions();
     },
   },
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .prueba {
   max-height: 53vh;
   overflow-y: auto;

@@ -9,4 +9,9 @@ export default {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+  async obtenerAutorizacionCortesia(token, clave) {
+    return await Service.post('trabajadores_seguridad', clave, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 };
