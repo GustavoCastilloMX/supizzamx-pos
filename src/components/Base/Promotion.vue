@@ -29,6 +29,13 @@
       </v-card-actions>
     </v-card>
 
+    <pizzasSelect
+      :showPizzasSelect="showPizzasSelect"
+      :pizzasPromo="pizzasPromo"
+      @finalizarPedido="finalizarPedido"
+      @cancel="showPizzasSelect = false"
+    />
+
     <!-- CARGA -->
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -42,6 +49,7 @@ import Promotion from "../../services/Promotion";
 export default {
   name: "SodasComponent",
   components: {
+    pizzasSelect: () => import("./PizzasSelect"),
     moneyFormat: () =>
       import(/* webpackChunkName: "moneyFormat" */ "vue-money-format"),
   },
@@ -52,6 +60,7 @@ export default {
     },
   },
   data: () => ({
+    showPizzasSelect: false,
     overlay: false,
     days: [
       "Domingo",
@@ -63,6 +72,7 @@ export default {
       "Sabado",
     ],
     items: [],
+    pizzasPromo: {},
   }),
   methods: {
     async init() {
@@ -85,9 +95,21 @@ export default {
       }
     },
     selected(item) {
+      if (!item.modificar) {
+        this.enviarPedido(item);
+        return true;
+      }
+      this.pizzasPromo = item;
+      this.showPizzasSelect = true;
+    },
+    enviarPedido(item) {
       item.cantidad = 1;
       item.tipo = "promocion";
       this.$emit("itemSelected", item);
+    },
+    finalizarPedido(item) {
+      this.showPizzasSelect = false;
+      this.enviarPedido(item);
     },
   },
   watch: {

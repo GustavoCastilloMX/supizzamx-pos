@@ -378,7 +378,9 @@ export default {
       let id = data._id;
       let existe = false;
 
-      if (data.tipo != "pizza") {
+      console.log(data);
+      if (data.tipo != "pizza" && data.tipo != "promocion") {
+        console.log("entreee");
         this.pedido.forEach((e) => {
           if (e._id == id) {
             e.cantidad++;
