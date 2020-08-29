@@ -6,4 +6,9 @@ export default {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+  async create(token, direccion) {
+    return await Service.post('direcciones', direccion, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 };

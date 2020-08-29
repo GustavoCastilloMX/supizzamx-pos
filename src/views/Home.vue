@@ -138,7 +138,6 @@
 
     <client
       :showClient="showClient"
-      :clients="clients"
       @cancel="showClient = false"
       @clientSelected="clientSelected"
     />
@@ -220,7 +219,6 @@ export default {
     showToPay: false,
     showRepartidores: false,
     sodaData: {},
-    clients: [],
     cliente: "",
     opciones: [
       {
@@ -341,7 +339,6 @@ export default {
       this.sumarArticulos();
     },
     async addClient() {
-      if (this.clients.length == 0) await this.getClients();
       this.showClient = true;
     },
     async getClients() {
