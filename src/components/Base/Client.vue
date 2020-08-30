@@ -37,6 +37,13 @@
 
     <addClient :showAdd="showAdd" @cancel="showAdd = false" @saved="getAllClients" />
 
+    <selectAddress
+      :showAddressClient="showAddressClient"
+      :address="address"
+      :client="client"
+      @addressSelect="enviarDireccion"
+      @cancel="showAddressClient = false"
+    />
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -50,6 +57,7 @@ import Client from "../../services/Client";
 export default {
   name: "ClientComponent",
   components: {
+    selectAddress: () => import("./selectAddress"),
     addClient: () => import("./AddClient"),
   },
   props: {
@@ -60,6 +68,7 @@ export default {
   },
   data: () => ({
     overlay: false,
+    showAddressClient: false,
     headers: [
       {
         text: "Nombre(s)",
@@ -73,6 +82,8 @@ export default {
     search: "",
     showAdd: false,
     clients: [],
+    address: [],
+    client: {},
   }),
   methods: {
     cancel() {
@@ -81,8 +92,21 @@ export default {
     async seleccionar(client) {
       let data = client;
       let direccionAux = await this.getAddress(client._id);
-      data.direccion = direccionAux[0];
-      this.$emit("clientSelected", data);
+
+      if (direccionAux.length == 1) {
+        data.direccion = direccionAux[0];
+        this.enviarDireccion(data);
+      }
+
+      if (direccionAux.length > 1) {
+        this.client = data;
+        this.address = direccionAux;
+        this.showAddressClient = true;
+      }
+    },
+    enviarDireccion(client) {
+      this.showAddressClient = false;
+      this.$emit("clientSelected", client);
     },
     async getAddress(clientId) {
       let token = localStorage.token;
@@ -111,7 +135,6 @@ export default {
   },
   watch: {
     showClient: function () {
-      console.log("ENTRE");
       if (this.showClient) this.getAllClients();
     },
   },
