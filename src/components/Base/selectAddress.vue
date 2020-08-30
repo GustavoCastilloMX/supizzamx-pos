@@ -88,7 +88,7 @@ export default {
       required: true,
     },
     client: {
-      type: Object,
+      type: Object | String,
       required: true,
     },
   },

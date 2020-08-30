@@ -16,12 +16,25 @@
           ></moneyFormat>
         </p>
         <v-card v-if="cliente != ''">
-          <v-card-title class="pb-0">{{cliente.nombres}} {{cliente.apellidos}}</v-card-title>
-          <v-card-text class="mb-0 pb-3">
-            <div>{{cliente.direccion.calle}}</div>
-            <div>Exterior: {{cliente.direccion.numero_ext}} Interior: {{cliente.direccion.numero_int}}</div>
-            <div>Colonia {{cliente.direccion.colonia}}</div>
-          </v-card-text>
+          <v-row>
+            <v-col cols="8" class="mb-0 pb-0">
+              <v-card-title class="pb-3">{{cliente.nombres}} {{cliente.apellidos}}</v-card-title>
+              <v-card-subtitle class="mb-0 pb-0">Teléfono {{cliente.telefono}}</v-card-subtitle>
+            </v-col>
+            <v-col cols="4" class="mb-0 pb-0"></v-col>
+            <v-col cols="8" pt-0 mt-0>
+              <v-card-text class="mb-0 pb-3">
+                <div>{{cliente.direccion.calle}}</div>
+                <div>Exterior: {{cliente.direccion.numero_ext}} Interior: {{cliente.direccion.numero_int}}</div>
+                <div>Colonia {{cliente.direccion.colonia}}</div>
+              </v-card-text>
+            </v-col>
+            <v-col cols="4" class="d-flex justify-end align-center pr-5 pt-0 mt-0">
+              <v-btn icon color="green" large @click="changeAddress">
+                <v-icon>mdi-reload</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-card>
 
         <v-row class="mb-3">
@@ -136,11 +149,7 @@
       </v-col>
     </v-row>
 
-    <client
-      :showClient="showClient"
-      @cancel="showClient = false"
-      @clientSelected="clientSelected"
-    />
+    <client :showClient="showClient" @cancel="showClient = false" @clientSelected="clientSelected" />
 
     <complements
       :showComplements="showComplements"
@@ -181,6 +190,13 @@
       @cancel="showRepartidores = false"
     />
 
+    <selectAddress
+      :showAddressClient="showAddressClient"
+      :client="cliente"
+      @cancel="showAddressClient = false"
+      @addressSelect="addressSelect"
+    />
+
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -206,6 +222,7 @@ export default {
     editSoda: () => import("../components/Base/SodasEdit"),
     wayToPay: () => import("../components/Base/WayToPay"),
     repartidores: () => import("../components/Base/Repartidores"),
+    selectAddress: () => import("../components/Base/selectAddress"),
   },
   data: () => ({
     overlay: false,
@@ -218,6 +235,7 @@ export default {
     showSodasEdit: false,
     showToPay: false,
     showRepartidores: false,
+    showAddressClient: false,
     sodaData: {},
     cliente: "",
     opciones: [
@@ -561,6 +579,13 @@ export default {
       pedido.supervisor = data.supervisor;
 
       await this.enviarPago(pedido);
+    },
+    changeAddress() {
+      this.showAddressClient = true;
+    },
+    addressSelect(item) {
+      this.cliente = item;
+      this.showAddressClient = false;
     },
   },
   watch: {
