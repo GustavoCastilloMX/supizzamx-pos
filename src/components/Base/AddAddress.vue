@@ -106,6 +106,10 @@
         >Guardar</v-btn>
       </v-card-actions>
     </v-card>
+
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-dialog>
 </template>
 
@@ -124,6 +128,14 @@ export default {
     idClient: {
       type: String,
       required: true,
+    },
+    isEdit: {
+      type: Boolean,
+      required: true,
+    },
+    addressEdit: {
+      type: Object,
+      required: false,
     },
   },
   data: () => ({
@@ -144,7 +156,8 @@ export default {
       if (!this.$refs.form.validate()) return true;
 
       this.loading = true;
-      await this.saveAddress();
+      if (this.isEdit) await this.editAddress();
+      if (!this.isEdit) await this.saveAddress();
       this.loadingFalse = false;
     },
     async saveAddress() {
@@ -153,6 +166,21 @@ export default {
 
       try {
         const response = await Address.create(token, this.address);
+        if (response.status == 200) this.saved();
+        if (response.status == 202) this.showMessageError(response.data);
+      } catch (error) {
+        console.warn(error.response);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async editAddress() {
+      let token = localStorage.token;
+      let idAddress = this.address._id;
+      this.address.cliente = await this.idClient;
+
+      try {
+        const response = await Address.edit(token, idAddress, this.address);
         if (response.status == 200) this.saved();
         if (response.status == 202) this.showMessageError(response.data);
       } catch (error) {
@@ -188,6 +216,11 @@ export default {
         confirmButtonText: `<span style="font-family: 'Open Sans'">Ok</span>`,
         showConfirmButton: true,
       });
+    },
+  },
+  watch: {
+    addressEdit: function () {
+      this.address = Object.assign({}, this.addressEdit);
     },
   },
 };

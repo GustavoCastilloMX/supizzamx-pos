@@ -11,4 +11,9 @@ export default {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+  async edit(token, idAddress, direccion) {
+    return await Service.put(`direcciones/${idAddress}`, direccion, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 };

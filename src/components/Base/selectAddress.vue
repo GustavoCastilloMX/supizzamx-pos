@@ -62,6 +62,8 @@
     <addAddress
       :showAddAddress="showAddAddress"
       :idClient="idClient"
+      :isEdit="isEdit"
+      :addressEdit="addressEdit"
       @saved="init"
       @cancel="showAddAddress = false"
     />
@@ -96,6 +98,8 @@ export default {
     showAddAddress: false,
     idClient: "",
     address: "",
+    isEdit: false,
+    addressEdit: {},
   }),
   methods: {
     async init() {
@@ -113,6 +117,7 @@ export default {
       this.$emit("addressSelect", data);
     },
     createAddress() {
+      this.isEdit = false;
       this.idClient = this.client._id;
       this.showAddAddress = true;
     },
@@ -125,6 +130,12 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    directionEdit(item) {
+      this.isEdit = true;
+      this.addressEdit = item;
+      this.idClient = this.client._id;
+      this.showAddAddress = true;
     },
   },
   watch: {
