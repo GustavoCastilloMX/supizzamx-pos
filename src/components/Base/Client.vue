@@ -39,7 +39,6 @@
 
     <selectAddress
       :showAddressClient="showAddressClient"
-      :address="address"
       :client="client"
       @addressSelect="enviarDireccion"
       @cancel="showAddressClient = false"
@@ -82,7 +81,6 @@ export default {
     search: "",
     showAdd: false,
     clients: [],
-    address: [],
     client: {},
   }),
   methods: {
@@ -100,7 +98,6 @@ export default {
 
       if (direccionAux.length > 1) {
         this.client = data;
-        this.address = direccionAux;
         this.showAddressClient = true;
       }
     },
