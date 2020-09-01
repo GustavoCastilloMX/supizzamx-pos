@@ -21,7 +21,10 @@
           :headers="headers"
           :items="items"
           :search="search"
-        ></v-data-table>
+        >
+          <!-- TEMPLATE FOLIO -->
+          <template v-slot:item.folio="{ item }">{{getFolio(item._id)}}</template>
+        </v-data-table>
       </v-card>
     </v-col>
   </v-row>
@@ -72,8 +75,8 @@ export default {
       }
     },
     getFolio(id) {
-      
-    }
+      return id.slice(-6);
+    },
   },
 };
 </script>
