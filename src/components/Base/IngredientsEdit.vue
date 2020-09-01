@@ -206,9 +206,10 @@ export default {
       return exist;
     },
     sumarExtras() {
+      let limite = this.item.limite_ingr - 1;
       let total = 0;
       this.ingredients.forEach((e, index) => {
-        if (index > 3) total += e.precio;
+        if (index > limite) total += e.precio;
       });
       this.totalExtras = total;
       this.sumarTotal();
@@ -222,6 +223,7 @@ export default {
       if (this.size >= 0) this.sumarTotal();
     },
     showIngredientsEdit: function () {
+      this.totalExtras = 0;
       this.size = -1;
       this.sizes = this.item.tamanos;
 
