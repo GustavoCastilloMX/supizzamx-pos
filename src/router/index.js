@@ -18,6 +18,13 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "inicio" */ '../views/Login.vue'),
   },
+  {
+    path: '/pedidos',
+    name: 'Pedidos',
+    component: () =>
+      import(/* webpackChunkName: "pedidos" */ '../views/Pedidos.vue'),
+    beforeEnter: ifAuthenticated,
+  },
 ];
 
 const router = new VueRouter({

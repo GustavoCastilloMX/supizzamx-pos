@@ -6,4 +6,10 @@ export default {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+
+  async getSales(token) {
+    return await Service.get('pedidos', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 };

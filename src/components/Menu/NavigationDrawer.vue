@@ -1,5 +1,13 @@
 <template>
-  <v-navigation-drawer v-model="drawer" app mini-variant touchless right permanent color="rojoSupizza">
+  <v-navigation-drawer
+    v-model="drawer"
+    app
+    mini-variant
+    touchless
+    right
+    permanent
+    color="rojoSupizza"
+  >
     <v-list-item class="px-2">
       <v-list-item-avatar>
         <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
@@ -15,14 +23,20 @@
     <v-divider></v-divider>
 
     <v-list dense>
-      <v-list-item link>
+      <v-list-item link to="/pedidos" active-class="white--text red">
         <v-list-item-content>
-          <v-icon dark>mdi-message-bulleted</v-icon>
+          <v-icon color="white">mdi-message-bulleted</v-icon>
         </v-list-item-content>
       </v-list-item>
-      <v-list-item v-for="item in items" :key="item.title" link>
+      <v-list-item
+        v-for="item in items"
+        :key="item.title"
+        link
+        :to="item.to"
+        active-class="white--text red"
+      >
         <v-list-item-content>
-          <v-icon dark>{{ item.icon }}</v-icon>
+          <v-icon color="white">{{ item.icon }}</v-icon>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -35,8 +49,8 @@ export default {
   data: () => ({
     drawer: true,
     items: [
-      { icon: "mdi-point-of-sale" },
-      { icon: "mdi-account-arrow-right" },
+      { icon: "mdi-point-of-sale", to: "/" },
+      { icon: "mdi-account-arrow-right", to: "/login" },
     ],
   }),
 };
