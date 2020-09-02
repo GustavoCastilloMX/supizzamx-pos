@@ -21,9 +21,13 @@
           :headers="headers"
           :items="items"
           :search="search"
+          :custom-sort="customSort"
         >
           <!-- TEMPLATE FOLIO -->
           <template v-slot:item.folio="{ item }">{{getFolio(item._id)}}</template>
+
+          <!-- TEMPLATE FECHA -->
+          <template v-slot:item.fecha="{ item }">{{getFecha(item.fecha)}}</template>
         </v-data-table>
       </v-card>
     </v-col>
@@ -31,6 +35,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import Sale from "../../services/Sale";
 
 export default {
@@ -76,6 +81,31 @@ export default {
     },
     getFolio(id) {
       return id.slice(-6);
+    },
+    getFecha(fecha) {
+      let newLocale = "es";
+      let newDate = new Date(fecha);
+      moment.locale(newLocale);
+      return moment(newDate).format("L");
+    },
+    customSort(items, index, isDesc) {
+      if (isDesc[0]) {
+        items.sort(function (a, b) {
+          var c = new Date(a.fecha);
+          var d = new Date(b.fecha);
+          return c - d;
+        });
+      }
+
+      if (!isDesc[0]) {
+        items.sort(function (a, b) {
+          var c = new Date(a.fecha);
+          var d = new Date(b.fecha);
+          return d - c;
+        });
+      }
+
+      return items;
     },
   },
 };
