@@ -28,6 +28,11 @@
 
           <!-- TEMPLATE FECHA -->
           <template v-slot:item.fecha="{ item }">{{getFecha(item.fecha)}}</template>
+
+          <!-- TEMPLATE PAGADO -->
+          <template v-slot:item.pagado="{ item }">
+            <v-chip label :color="item.pagado ? 'green' : 'red'" dark>{{item.pagado ? 'Sí' : 'No'}}</v-chip>
+          </template>
         </v-data-table>
       </v-card>
     </v-col>
@@ -89,23 +94,95 @@ export default {
       return moment(newDate).format("L");
     },
     customSort(items, index, isDesc) {
-      if (isDesc[0]) {
-        items.sort(function (a, b) {
-          var c = new Date(a.fecha);
-          var d = new Date(b.fecha);
-          return c - d;
-        });
+      console.log(index);
+
+      if (index[0] == "pagado") {
+        if (isDesc[0]) items = this.ordenarAscendente(items, "pagado");
+        if (!isDesc[0]) items = this.ordenarDescendente(items, "pagado");
       }
 
-      if (!isDesc[0]) {
-        items.sort(function (a, b) {
-          var c = new Date(a.fecha);
-          var d = new Date(b.fecha);
-          return d - c;
-        });
+      if (index[0] == "total") {
+        if (isDesc[0]) items = this.ordenarAscendente(items, "total");
+        if (!isDesc[0]) items = this.ordenarDescendente(items, "total");
       }
+
+      if (index[0] == "forma_pago") {
+        if (isDesc[0])
+          items = this.ordenarAscendenteString(items, "forma_pago");
+        if (!isDesc[0])
+          items = this.ordenarDescendenteString(items, "forma_pago");
+      }
+
+      if (index[0] == "entrega") {
+        if (isDesc[0]) items = this.ordenarAscendenteString(items, "entrega");
+        if (!isDesc[0]) items = this.ordenarDescendenteString(items, "entrega");
+      }
+
+      if (index[0] == "status") {
+        if (isDesc[0]) items = this.ordenarAscendenteString(items, "status");
+        if (!isDesc[0]) items = this.ordenarDescendenteString(items, "status");
+      }
+
+      if (index[0] == "fecha") {
+        if (isDesc[0]) items = this.ordenarAscendenteFecha(items, "fecha");
+        if (!isDesc[0]) items = this.ordenarDescendenteFecha(items, "fecha");
+      }
+
+      // if (isDesc[0]) {
+      //   items.sort(function (a, b) {
+      //     var c = new Date(a.fecha);
+      //     var d = new Date(b.fecha);
+      //     return c - d;
+      //   });
+      // }
+
+      // if (!isDesc[0]) {
+      //   items.sort(function (a, b) {
+      //     var c = new Date(a.fecha);
+      //     var d = new Date(b.fecha);
+      //     return d - c;
+      //   });
+      // }
 
       return items;
+    },
+    ordenarAscendenteFecha(items, key) {
+      return items.sort((a, b) => {
+        let c = new Date(a.fecha);
+        let d = new Date(b.fecha);
+        return d - c;
+      });
+    },
+    ordenarDescendenteFecha(items, key) {
+      return items.sort((a, b) => {
+        let c = new Date(a.fecha);
+        let d = new Date(b.fecha);
+        return c - d;
+      });
+    },
+    ordenarAscendente(items, key) {
+      return items.sort((a, b) => a[key] - b[key]);
+    },
+    ordenarDescendente(items, key) {
+      return items.sort((a, b) => b[key] - a[key]);
+    },
+    ordenarAscendenteString(items, key) {
+      return items.sort((a, b) =>
+        a[key].toLowerCase() < b[key].toLowerCase()
+          ? 1
+          : a[key].toLowerCase() > b[key].toLowerCase()
+          ? -1
+          : 0
+      );
+    },
+    ordenarDescendenteString(items, key) {
+      return items.sort((a, b) =>
+        a[key].toLowerCase() > b[key].toLowerCase()
+          ? 1
+          : a[key].toLowerCase() < b[key].toLowerCase()
+          ? -1
+          : 0
+      );
     },
   },
 };
