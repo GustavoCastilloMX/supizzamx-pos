@@ -111,7 +111,7 @@ export default {
       let newLocale = "es";
       let newDate = new Date(fecha);
       moment.locale(newLocale);
-      return moment(newDate).format("L");
+      return moment(newDate).format("lll");
     },
     customSort(items, index, isDesc) {
       console.log(index);
