@@ -33,6 +33,21 @@
           <template v-slot:item.pagado="{ item }">
             <v-chip label :color="item.pagado ? 'green' : 'red'" dark>{{item.pagado ? 'Sí' : 'No'}}</v-chip>
           </template>
+
+          <!-- TEMPLATE TOTAL -->
+          <template v-slot:item.total="{ item }">
+            <moneyFormat :value="item.total" locale="es-MX" currency-code="MXN"></moneyFormat>
+          </template>
+
+          <!-- TEMPLATE TOTAL -->
+          <template v-slot:item.options="{ item }">
+            <v-btn icon>
+              <v-icon color="cyan">mdi-file-table</v-icon>
+            </v-btn>
+            <v-btn icon color="blue">
+              <v-icon>mdi-printer</v-icon>
+            </v-btn>
+          </template>
         </v-data-table>
       </v-card>
     </v-col>
@@ -47,6 +62,10 @@ export default {
   name: "pedidosCajeroComponent",
   mounted() {
     this.init();
+  },
+  components: {
+    moneyFormat: () =>
+      import(/* webpackChunkName: "moneyFormat" */ "vue-money-format"),
   },
   data: () => ({
     loading: false,
@@ -64,6 +83,7 @@ export default {
       { text: "Forma de pago", value: "forma_pago" },
       { text: "Entrega", value: "entrega" },
       { text: "Status", value: "status" },
+      { text: "", value: "options" },
     ],
     items: [],
   }),
@@ -127,22 +147,6 @@ export default {
         if (isDesc[0]) items = this.ordenarAscendenteFecha(items, "fecha");
         if (!isDesc[0]) items = this.ordenarDescendenteFecha(items, "fecha");
       }
-
-      // if (isDesc[0]) {
-      //   items.sort(function (a, b) {
-      //     var c = new Date(a.fecha);
-      //     var d = new Date(b.fecha);
-      //     return c - d;
-      //   });
-      // }
-
-      // if (!isDesc[0]) {
-      //   items.sort(function (a, b) {
-      //     var c = new Date(a.fecha);
-      //     var d = new Date(b.fecha);
-      //     return d - c;
-      //   });
-      // }
 
       return items;
     },
