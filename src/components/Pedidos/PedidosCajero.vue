@@ -41,7 +41,7 @@
 
           <!-- TEMPLATE TOTAL -->
           <template v-slot:item.options="{ item }">
-            <v-btn icon>
+            <v-btn icon @click="verDetallePedido(item)">
               <v-icon color="cyan">mdi-file-table</v-icon>
             </v-btn>
             <v-btn icon color="blue">
@@ -51,6 +51,8 @@
         </v-data-table>
       </v-card>
     </v-col>
+
+    <detallePedido :showDetail="showDetail" :pedido="pedido" @cancel="showDetail = false" />
   </v-row>
 </template>
 
@@ -66,8 +68,11 @@ export default {
   components: {
     moneyFormat: () =>
       import(/* webpackChunkName: "moneyFormat" */ "vue-money-format"),
+    detallePedido: () => import("./DetallePedidos"),
   },
   data: () => ({
+    pedido: {},
+    showDetail: false,
     loading: false,
     search: "",
     headers: [
@@ -187,6 +192,10 @@ export default {
           ? -1
           : 0
       );
+    },
+    verDetallePedido(pedido) {
+      this.pedido = Object.assign({}, pedido);
+      this.showDetail = true;
     },
   },
 };
