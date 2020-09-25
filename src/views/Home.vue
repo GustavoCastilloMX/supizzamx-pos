@@ -3,112 +3,10 @@
     <h2 class="text-center mb-3">
       <v-icon color="rojoSupizza" class="pr-2">mdi-point-of-sale</v-icon>Caja
     </h2>
-    <v-row>
-      <v-col cols="7">
-        <p class="mb-2">
-          <span>Total:</span>
-          <moneyFormat
-            class="font-weight-medium"
-            style="display: inline"
-            :value="data.total"
-            locale="es-MX"
-            currency-code="MXN"
-          ></moneyFormat>
-        </p>
-        <v-card v-if="cliente != ''">
-          <v-row>
-            <v-col cols="8" class="mb-0 pb-0">
-              <v-card-title class="pb-3">{{cliente.nombres}} {{cliente.apellidos}}</v-card-title>
-              <v-card-subtitle class="mb-0 pb-0">Teléfono {{cliente.telefono}}</v-card-subtitle>
-            </v-col>
-            <v-col cols="4" class="mb-0 pb-0"></v-col>
-            <v-col cols="8" pt-0 mt-0>
-              <v-card-text class="mb-0 pb-3">
-                <div>{{cliente.direccion.calle}}</div>
-                <div>Exterior: {{cliente.direccion.numero_ext}} Interior: {{cliente.direccion.numero_int}}</div>
-                <div>Colonia {{cliente.direccion.colonia}}</div>
-              </v-card-text>
-            </v-col>
-            <v-col cols="4" class="d-flex justify-end align-center pr-5 pt-0 mt-0">
-              <v-btn icon color="green" large @click="changeAddress">
-                <v-icon>mdi-reload</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card>
-
-        <v-row class="mb-3">
-          <v-col cols="12" v-if="pedido.length != 0">
-            <v-card class="prueba" elevation="7">
-              <v-list two-line subheader color="grey lighten-5">
-                <div v-for="(item, index) in pedido" :key="item._id">
-                  <v-list-item :class="(index % 2 != 0) ? 'grey lighten-5' : 'grey lighten-4'">
-                    <v-list-item-avatar size="30" width="150" tile>
-                      <v-btn
-                        @click="itemMinus(index)"
-                        class="ma-2"
-                        :class="item.tipo == 'pizza' ? 'grey darken-1' : 'indigo'"
-                        tile
-                        dark
-                        large
-                        icon
-                        :disabled="item.tipo == 'pizza' || item.tipo == 'promocion' ? true : false"
-                      >
-                        <v-icon small>mdi-minus</v-icon>
-                      </v-btn>
-                      <span class="text-center">{{ item.cantidad }}</span>
-
-                      <v-btn
-                        @click="itemPlus(index)"
-                        class="ma-2"
-                        :class="item.tipo == 'pizza' ? 'grey darken-1' : 'indigo'"
-                        tile
-                        dark
-                        large
-                        icon
-                        :disabled="item.tipo == 'pizza' || item.tipo == 'promocion' ? true : false"
-                      >
-                        <v-icon small>mdi-plus</v-icon>
-                      </v-btn>
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                      <v-list-item-title>{{item.nombre }}</v-list-item-title>
-                      <v-list-item-subtitle
-                        v-if="item.tipo == 'pizza'"
-                      >{{item.tamanos[0].nombre}} - {{getIngredients(item.ingredientes)}}</v-list-item-subtitle>
-                      <v-list-item-subtitle>
-                        <moneyFormat
-                          class="font-weight-medium"
-                          style="display: inline"
-                          :value="item.precio"
-                          locale="es-MX"
-                          currency-code="MXN"
-                        ></moneyFormat>
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                    <v-list-item-action v-if="item.tipo == 'promocion' && item.bebidas.length > 0">
-                      <v-btn icon @click="sodaChange(index)">
-                        <v-icon color="green">mdi-playlist-edit</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                      <v-btn icon @click="removeItem(index)">
-                        <v-icon color="red">mdi-delete</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
-                </div>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-        <h4 v-if="data.nota != ''" class="text-body-2 font-weight-medium">Nota:</h4>
-        <p v-if="data.nota != ''" class="text-body-2">{{data.nota}}</p>
-      </v-col>
-      <v-col cols="5">
+    <v-row cols="12">
+      <v-col cols="6">
         <v-row>
-          <v-col cols="12" class="pt-0">
+          <v-col cols="12" class="pt-0 justify-center">
             <v-radio-group
               v-model="data.entrega"
               row
@@ -129,13 +27,15 @@
           >
             <v-card
               :disabled="item.disabled"
-              color="indigo"
+              color="rojoSupizza"
               class="white--text"
               @click="click(item.click)"
             >
               <v-row>
                 <v-col cols="8" class="d-flex justify-center align-center">
-                  <h3 class="text-center font-weight-medium">{{item.nombre}}</h3>
+                  <h3 class="text-center font-weight-medium">
+                    {{ item.nombre }}
+                  </h3>
                 </v-col>
                 <v-col cols="4">
                   <v-avatar tile size="60">
@@ -147,9 +47,148 @@
           </v-col>
         </v-row>
       </v-col>
+      <v-col cols="6" class="mt-8">
+        <p class="mb-2 d-flex flex-row justify-end" style="margin-top: -30px; font-size: 30px">
+          <span>Total:</span>
+          <moneyFormat
+            class="font-weight-medium"
+            style="display: inline"
+            :value="data.total"
+            locale="es-MX"
+            currency-code="MXN"
+          ></moneyFormat>
+        </p>
+
+        <v-card v-if="cliente != ''" style="margin-top: 20px; padding: 0px 15px">
+          <v-row>
+            <v-col cols="12" >
+              <v-card-title class="pb-3">
+                {{ cliente.nombres }} {{ cliente.apellidos }}
+              </v-card-title>
+              <v-card-subtitle class="mb-0 pb-0"
+                >Teléfono {{ cliente.telefono }}</v-card-subtitle
+              >
+            </v-col>
+            <v-col cols="8" pt-0 mt-0>
+              <v-card-text class="mb-0 pb-3">
+                <div>{{ cliente.direccion.calle }}</div>
+                <div>
+                  Exterior: {{ cliente.direccion.numero_ext }} Interior:
+                  {{ cliente.direccion.numero_int }}
+                </div>
+                <div>Colonia {{ cliente.direccion.colonia }}</div>
+              </v-card-text>
+            </v-col>
+            <v-col
+              cols="4"
+              class="d-flex justify-end align-center pr-5 pt-0 mt-0"
+            >
+              <v-btn icon color="green" large @click="changeAddress">
+                <v-icon>mdi-reload</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
+
+        <v-row class="mb-3">
+          <v-col cols="12" v-if="pedido.length != 0">
+            <v-card class="prueba" elevation="7">
+              <v-list two-line subheader color="grey lighten-5">
+                <div v-for="(item, index) in pedido" :key="item._id">
+                  <v-list-item
+                    :class="
+                      index % 2 != 0 ? 'grey lighten-5' : 'grey lighten-4'
+                    "
+                  >
+                    <v-list-item-avatar size="30" width="150" tile>
+                      <v-btn
+                        @click="itemMinus(index)"
+                        class="ma-2"
+                        :class="
+                          item.tipo == 'pizza' ? 'grey darken-1' : 'secondary'
+                        "
+                        tile
+                        dark
+                        large
+                        icon
+                        :disabled="
+                          item.tipo == 'pizza' || item.tipo == 'promocion'
+                            ? true
+                            : false
+                        "
+                      >
+                        <v-icon small>mdi-minus</v-icon>
+                      </v-btn>
+                      <span class="text-center">{{ item.cantidad }}</span>
+
+                      <v-btn
+                        @click="itemPlus(index)"
+                        class="ma-2"
+                        :class="
+                          item.tipo == 'pizza' ? 'grey darken-1' : 'secondary'
+                        "
+                        tile
+                        dark
+                        large
+                        icon
+                        :disabled="
+                          item.tipo == 'pizza' || item.tipo == 'promocion'
+                            ? true
+                            : false
+                        "
+                      >
+                        <v-icon small>mdi-plus</v-icon>
+                      </v-btn>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.nombre }}</v-list-item-title>
+                      <v-list-item-subtitle v-if="item.tipo == 'pizza'"
+                        >{{ item.tamanos[0].nombre }} -
+                        {{
+                          getIngredients(item.ingredientes)
+                        }}</v-list-item-subtitle
+                      >
+                      <v-list-item-subtitle>
+                        <moneyFormat
+                          class="font-weight-medium"
+                          style="display: inline"
+                          :value="item.precio"
+                          locale="es-MX"
+                          currency-code="MXN"
+                        ></moneyFormat>
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-list-item-action
+                      v-if="item.tipo == 'promocion' && item.bebidas.length > 0"
+                    >
+                      <v-btn icon @click="sodaChange(index)">
+                        <v-icon color="green">mdi-playlist-edit</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                    <v-list-item-action>
+                      <v-btn icon @click="removeItem(index)">
+                        <v-icon color="red2">mdi-delete</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </div>
+              </v-list>
+            </v-card>
+          </v-col>
+        </v-row>
+        <h4 v-if="data.nota != ''" class="text-body-2 font-weight-medium">
+          Nota:
+        </h4>
+        <p v-if="data.nota != ''" class="text-body-2">{{ data.nota }}</p>
+      </v-col>
     </v-row>
 
-    <client :showClient="showClient" @cancel="showClient = false" @clientSelected="clientSelected" />
+    <client
+      :showClient="showClient"
+      @cancel="showClient = false"
+      @clientSelected="clientSelected"
+    />
 
     <complements
       :showComplements="showComplements"
@@ -157,7 +196,11 @@
       @cancel="showComplements = false"
     />
 
-    <sodas :showSodas="showSodas" @itemSelected="itemSelected" @cancel="showSodas = false" />
+    <sodas
+      :showSodas="showSodas"
+      @itemSelected="itemSelected"
+      @cancel="showSodas = false"
+    />
 
     <editSoda
       :showSodasEdit="showSodasEdit"
@@ -172,9 +215,18 @@
       @cancel="showPromotions = false"
     />
 
-    <pizzas :showPizzas="showPizzas" @itemSelected="itemSelected" @cancel="showPizzas = false" />
+    <pizzas
+      :showPizzas="showPizzas"
+      @itemSelected="itemSelected"
+      @cancel="showPizzas = false"
+    />
 
-    <note :showNote="showNote" :note="note" @saveNote="saveNote" @cancel="showNote = false" />
+    <note
+      :showNote="showNote"
+      :note="note"
+      @saveNote="saveNote"
+      @cancel="showNote = false"
+    />
 
     <wayToPay
       :showToPay="showToPay"

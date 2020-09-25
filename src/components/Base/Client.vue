@@ -1,12 +1,12 @@
 <template>
-  <v-dialog v-model="showClient" persistent max-width="800">
+  <v-dialog v-model="showClient" persistent max-width="950">
     <v-card>
-      <v-toolbar dense flat color="rojoSupizza" dark class="mb-5">
+      <v-toolbar dense flat color="rojoSupizza" dark class="mb-6">
         <v-toolbar-title class="font-weight-medium">Clientes</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <v-row>
-          <v-col cols="8">
+          <v-col cols="9">
             <v-text-field
               class="mb-3"
               outlined
@@ -19,11 +19,11 @@
             ></v-text-field>
           </v-col>
 
-          <v-col cols="4">
+          <v-col cols="3">
             <v-btn block depressed color="green" dark @click="showAdd = true">Agregar cliente</v-btn>
           </v-col>
         </v-row>
-        <v-data-table :headers="headers" :items="clients" :search="search" class="elevation-5">
+        <v-data-table :headers="headers" :items="clients" :search="search" >
           <template v-slot:item.seleccionar="{ item }">
             <v-btn depressed color="green" @click="seleccionar(item)" dark>Seleccionar</v-btn>
           </template>
@@ -31,7 +31,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="green darken-1" text @click="cancel">Cancelar</v-btn>
+        <v-btn color="red2 darken-1" text @click="cancel">Cancelar</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -75,7 +75,7 @@ export default {
       },
       { text: "Apellidos", value: "apellidos" },
       { text: "Teléfono", value: "telefono" },
-      { text: "Email", value: "mail" },
+      { text: "Correo", value: "mail" },
       { text: "Seleccionar", value: "seleccionar", sortable: false },
     ],
     search: "",

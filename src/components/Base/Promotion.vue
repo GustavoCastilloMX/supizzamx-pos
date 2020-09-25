@@ -7,10 +7,10 @@
       <v-card-text>
         <v-row>
           <v-col cols="4" v-for="item in items" :key="item._id">
-            <v-card @click="selected(item)">
+            <v-card @click="selected(item)" >
               <v-img :src="item.urlImg.very_small" height="120"></v-img>
-              <h2 class="text-h6 font-weight-medium mt-2 ml-2">{{item.nombre}}</h2>
-              <h2 class="text-h6 font-weight-medium ml-2">
+              <h3 class="text-h6 font-weight-regular mt-2 ml-2" style=" text-align: center;">{{item.nombre}}</h3>
+              <h2 class="text-h5 font-weight-medium ml-2" style="padding-bottom: 15px; text-align: center;">
                 <moneyFormat
                   class="font-weight-medium"
                   style="display: inline"

@@ -23,7 +23,7 @@
     <v-divider></v-divider>
 
     <v-list dense>
-      <v-list-item link to="/pedidos" active-class="white--text red">
+      <v-list-item link to="/pedidos" active-class="white--text red2">
         <v-list-item-content>
           <v-icon color="white">mdi-message-bulleted</v-icon>
         </v-list-item-content>
@@ -33,7 +33,7 @@
         :key="item.title"
         link
         :to="item.to"
-        active-class="white--text red"
+        active-class="white--text red2"
       >
         <v-list-item-content>
           <v-icon color="white">{{ item.icon }}</v-icon>
