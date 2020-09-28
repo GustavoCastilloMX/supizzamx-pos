@@ -24,7 +24,7 @@
           :custom-sort="customSort"
         >
           <!-- TEMPLATE FOLIO -->
-          <template v-slot:item.folio="{ item }">{{getFolio(item._id)}}</template>
+          <template v-if="items.length > 0" v-slot:item.folio="{ item }">{{getFolio(item._id)}}</template>
 
           <!-- TEMPLATE FECHA -->
           <template v-slot:item.fecha="{ item }">{{getFecha(item.fecha)}}</template>
@@ -112,7 +112,9 @@ export default {
       }
     },
     getFolio(id) {
-      if (id != undefined) return id.slice(-6);
+      if (id != undefined) {
+        return id.slice(-6);
+      }
     },
     getFecha(fecha) {
       let newLocale = "es";
@@ -127,8 +129,6 @@ export default {
       return moment(newDate).format("LLLL");
     },
     customSort(items, index, isDesc) {
-      console.log(index);
-
       if (index[0] == "pagado") {
         if (isDesc[0]) items = this.ordenarAscendente(items, "pagado");
         if (!isDesc[0]) items = this.ordenarDescendente(items, "pagado");

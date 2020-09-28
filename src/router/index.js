@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { ifAuthenticated } from '../libs/Auth';
+import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
@@ -8,8 +9,9 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () =>
-      import(/* webpackChunkName: "inicio" */ '../views/Home.vue'),
+    // component: () =>
+    //   import(/* webpackChunkName: "inicio" */ '../views/Home.vue'),
+    component: Home,
     beforeEnter: ifAuthenticated,
   },
   {
