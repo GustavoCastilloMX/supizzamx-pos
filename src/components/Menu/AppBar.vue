@@ -11,13 +11,15 @@
     <h1 class="ml-2 font-weight-medium text-h5">Sistema POS</h1>
 
     <v-spacer></v-spacer>
-    
   </v-app-bar>
 </template>
 
 <script>
 export default {
   name: "AppBarComponent",
+  created() {
+    console.log("PRUEBA");
+  },
 };
 </script>
 

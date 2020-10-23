@@ -48,7 +48,10 @@
         </v-row>
       </v-col>
       <v-col cols="6" class="mt-8">
-        <p class="mb-2 d-flex flex-row justify-end" style="margin-top: -30px; font-size: 30px">
+        <p
+          class="mb-2 d-flex flex-row justify-end"
+          style="margin-top: -30px; font-size: 30px"
+        >
           <span>Total:</span>
           <moneyFormat
             class="font-weight-medium"
@@ -59,9 +62,12 @@
           ></moneyFormat>
         </p>
 
-        <v-card v-if="cliente != ''" style="margin-top: 20px; padding: 0px 15px">
+        <v-card
+          v-if="cliente != ''"
+          style="margin-top: 20px; padding: 0px 15px"
+        >
           <v-row>
-            <v-col cols="12" >
+            <v-col cols="12">
               <v-card-title class="pb-3">
                 {{ cliente.nombres }} {{ cliente.apellidos }}
               </v-card-title>
@@ -256,25 +262,46 @@
 </template>
 
 <script>
+// Peticiones HTTP
 import Client from "../services/Client";
 import Sale from "../services/Sale";
 import DeliveryMen from "../services/DeliveryMen";
 
+//Componentes
+import moneyFormat from "vue-money-format";
+import complements from "../components/Base/Complements";
+import client from "../components/Base/Client";
+import sodas from "../components/Base/Sodas";
+import note from "../components/Base/Note";
+import pizzas from "../components/Base/Pizzas";
+import promotions from "../components/Base/Promotion";
+import editSoda from "../components/Base/SodasEdit";
+import wayToPay from "../components/Base/WayToPay";
+import repartidores from "../components/Base/Repartidores";
+import selectAddress from "../components/Base/selectAddress";
+
+//Mixins
+import { pahooMixin } from "../mixins/pahoo";
+import { channelOrdersMovil } from "../mixins/channelOrdersMovil";
+
 export default {
   name: "InicioView",
   components: {
-    moneyFormat: () =>
-      import(/* webpackChunkName: "moneyFormat" */ "vue-money-format"),
-    client: () => import("../components/Base/Client"),
-    complements: () => import("../components/Base/Complements"),
-    sodas: () => import("../components/Base/Sodas"),
-    note: () => import("../components/Base/Note"),
-    pizzas: () => import("../components/Base/Pizzas"),
-    promotions: () => import("../components/Base/Promotion"),
-    editSoda: () => import("../components/Base/SodasEdit"),
-    wayToPay: () => import("../components/Base/WayToPay"),
-    repartidores: () => import("../components/Base/Repartidores"),
-    selectAddress: () => import("../components/Base/selectAddress"),
+    moneyFormat,
+    client,
+    complements,
+    sodas,
+    note,
+    pizzas,
+    promotions,
+    editSoda,
+    wayToPay,
+    repartidores,
+    selectAddress,
+  },
+  mixins: [pahooMixin, channelOrdersMovil],
+  mounted() {
+    this.connectMQTT();
   },
   data: () => ({
     overlay: false,
