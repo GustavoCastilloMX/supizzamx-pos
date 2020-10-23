@@ -69,7 +69,7 @@ export const ticketManager = {
         align: 'center',
         maxWidth: 70,
       });
-      altura += 10;
+      altura += 6;
 
       // Folio
       doc.setFontSize(14);
@@ -161,7 +161,7 @@ export const ticketManager = {
 
       doc.setFont(font, 'normal');
       doc.text(
-        'supizza agradece su compra, vuelva pronto, visita',
+        'supizza agradece su compra, vuelva pronto, consulta menú y promociones en',
         40,
         altura,
         {
@@ -171,7 +171,7 @@ export const ticketManager = {
       );
       altura +=
         doc.getTextDimensions(
-          'supizza agradece su compra, vuelva pronto, visita',
+          'supizza agradece su compra, vuelva pronto, consulta menú y promociones en',
           {
             fontSize: 13,
             maxWidth: 70,
@@ -186,13 +186,33 @@ export const ticketManager = {
       });
       altura += 5;
 
-      doc.addImage(await image.qrBase64, 'jpg', 15, altura, 50, 50);
-      altura += 55;
+      doc.setFont(font, 'bold');
+      doc.setFontSize(9);
+      doc.text('Este no es un compronante fiscal*', 40, altura, {
+        maxWidth: 70,
+        align: 'center',
+      });
+      altura += 5;
 
       doc.setLineDashPattern([2, 2, 1, 2], 1);
       doc.setLineWidth(0.2);
       doc.line(5, altura, 75, altura);
-      altura += 7;
+      altura += 2;
+
+      doc.addImage(await image.qrBase64, 'jpg', 20, altura, 40, 40);
+      altura += 48;
+
+      // Folio
+      doc.setFontSize(16);
+      doc.text(`SU ORDEN - ${this.getFolio(item._id)}`, 5, altura, {
+        maxWidth: 70,
+      });
+      altura += 10;
+
+      //Nombre del cliente
+      let nombreCliente = `${item.cliente.nombres} ${item.cliente.apellidos}`;
+      doc.text(nombreCliente.toUpperCase(), 5, altura);
+      altura += 6;
 
       doc.setFontSize(16);
       doc.text(item.cliente.telefono.toString(), 5, altura);
