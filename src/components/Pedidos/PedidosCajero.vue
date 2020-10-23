@@ -129,7 +129,7 @@ export default {
       }
     },
     getFolio(id) {
-      if (id != undefined) return id.slice(-6);
+      if (id != undefined) return id.slice(-4);
     },
     getFecha(fecha) {
       let newLocale = "es";
