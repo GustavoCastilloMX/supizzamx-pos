@@ -13,9 +13,9 @@ export const ticketManager = {
 
       let font = doc.getFont().fontName;
 
-      // Alto 74% de ancho
-      doc.addImage(await image.logoBase64, 'png', 15, 3, 50, 37);
-      let altura = 50;
+      // Alto 63.9% de ancho
+      doc.addImage(await image.logoBase64, 'png', 15, 3, 50, 31.95);
+      let altura = 43;
 
       // Dirección
       doc.setFontSize(10);
