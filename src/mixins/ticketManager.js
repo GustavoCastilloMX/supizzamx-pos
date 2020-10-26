@@ -8,7 +8,7 @@ export const ticketManager = {
       let doc = new jsPDF({
         orientation: 'p',
         unit: 'mm',
-        format: [1, 2],
+        format: [0, 0],
       });
 
       let font = doc.getFont().fontName;
@@ -31,13 +31,13 @@ export const ticketManager = {
         align: 'center',
         maxWidth: 70,
       });
-      altura += 2;
+      altura += 6;
 
-      // Divisor
-      // doc.setLineDashPattern([7, 3, 1, 3], 10);
-      doc.setLineWidth(0.5);
-      doc.line(5, altura, 75, altura);
-      altura += 4;
+      // // Divisor
+      // // doc.setLineDashPattern([7, 3, 1, 3], 10);
+      // doc.setLineWidth(0.5);
+      // doc.line(5, altura, 75, altura);
+      // altura += 4;
 
       // Telefonos
       doc.setFontSize(9);
@@ -61,7 +61,11 @@ export const ticketManager = {
         align: 'center',
         maxWidth: 70,
       });
-      altura += 9;
+      altura += 5;
+
+      doc.setLineWidth(0.5);
+      doc.line(5, altura, 75, altura);
+      altura += 4;
 
       // Fecha
       doc.setFontSize(8);
