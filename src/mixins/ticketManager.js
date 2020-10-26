@@ -15,7 +15,7 @@ export const ticketManager = {
 
       // Alto 63.9% de ancho
       doc.addImage(await image.logoBase64, 'png', 15, 3, 50, 31.95);
-      let altura = 43;
+      let altura = 40;
 
       // Dirección
       doc.setFontSize(10);
@@ -31,7 +31,7 @@ export const ticketManager = {
         align: 'center',
         maxWidth: 70,
       });
-      altura += 4;
+      altura += 2;
 
       // Divisor
       // doc.setLineDashPattern([7, 3, 1, 3], 10);
@@ -42,16 +42,16 @@ export const ticketManager = {
       // Telefonos
       doc.setFontSize(9);
       doc.setFont(font, 'normal');
-      doc.text(`443 232 29 38   443 351 54 66   443 312 80 50`, 40, altura, {
+      doc.text(`443 351 54 66   443 312 80 50`, 40, altura, {
         align: 'center',
         maxWidth: 70,
       });
-      altura += 9;
+      altura += 5;
 
       // Datos fiscales
       doc.setFontSize(11);
       doc.setFont(font, 'bold');
-      doc.text(`JOSÉ ALBERTO HERREJÓN REYNA`, 40, altura, {
+      doc.text(`José Alberto Herrejón Reyna`, 40, altura, {
         align: 'center',
         maxWidth: 70,
       });
