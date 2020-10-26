@@ -1,21 +1,21 @@
 <template>
   <v-container>
     <v-row>
-      <h1>Pedidos</h1>
+      <h1>Pedidos de la App</h1>
       <v-col cols="12">
-        <cajeroPedidos/>
+        <tablaPedidosApp />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import tablaPedidosApp from "../components/Pedidos/PedidosApp";
 export default {
-  name: "PedidosView",
+  name: "PedidosApp",
   components: {
-    cajeroPedidos: () =>
-      import("../components/Pedidos/PedidosCajero"),
-  }
+    tablaPedidosApp,
+  },
 };
 </script>
 

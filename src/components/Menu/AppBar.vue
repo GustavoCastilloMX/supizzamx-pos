@@ -15,10 +15,14 @@
 </template>
 
 <script>
+import Socket from "../../common/socket";
+
 export default {
   name: "AppBarComponent",
   created() {
     console.log("PRUEBA");
+    let x = new Socket();
+    x.connect();
   },
 };
 </script>

@@ -27,6 +27,13 @@ const routes = [
       import(/* webpackChunkName: "pedidos" */ '../views/Pedidos.vue'),
     beforeEnter: ifAuthenticated,
   },
+  {
+    path: '/pedidos-app',
+    name: 'PedidosApp',
+    component: () =>
+      import(/* webpackChunkName: "pedidosApp" */ '../views/PedidosApp.vue'),
+    beforeEnter: ifAuthenticated,
+  },
 ];
 
 const router = new VueRouter({

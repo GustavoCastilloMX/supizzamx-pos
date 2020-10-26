@@ -28,6 +28,24 @@
           <v-icon color="white">mdi-message-bulleted</v-icon>
         </v-list-item-content>
       </v-list-item>
+      <v-list-item link to="/pedidos-app" active-class="white--text red2">
+        <v-list-item-content v-if="pedidosApp.length == 0">
+          <v-icon color="white">mdi-truck-fast</v-icon>
+        </v-list-item-content>
+        <v-badge
+          v-if="pedidosApp.length > 0"
+          color="orange"
+          :content="pedidosApp.length"
+          left
+          bottom
+          offset-x="8"
+          offset-y="23"
+        >
+          <v-list-item-content>
+            <v-icon color="white">mdi-truck-fast</v-icon>
+          </v-list-item-content>
+        </v-badge>
+      </v-list-item>
       <v-list-item
         v-for="item in items"
         :key="item.title"
@@ -44,6 +62,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "NavigationDrawerComponent",
   data: () => ({
@@ -53,6 +72,9 @@ export default {
       { icon: "mdi-account-arrow-right", to: "/login" },
     ],
   }),
+  computed: {
+    ...mapState(["pedidosApp"]),
+  },
 };
 </script>
 

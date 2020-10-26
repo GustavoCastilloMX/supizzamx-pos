@@ -301,7 +301,7 @@ export default {
   },
   mixins: [pahooMixin, channelOrdersMovil],
   mounted() {
-    this.connectMQTT();
+    // this.connectMQTT();
   },
   data: () => ({
     overlay: false,

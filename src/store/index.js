@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     modulos: {},
+    pedidosApp: [],
   },
   mutations: {
     async setModulos(state, payload) {

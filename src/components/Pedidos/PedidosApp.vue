@@ -19,7 +19,7 @@
           :loading="loading"
           loading-text="Cargando pedidos..."
           :headers="headers"
-          :items="items"
+          :items="pedidosApp"
           :search="search"
           :custom-sort="customSort"
         >
@@ -54,9 +54,6 @@
             <v-btn icon color="cyan" @click="verDetallePedido(item)">
               <v-icon>mdi-file-table</v-icon>
             </v-btn>
-            <v-btn icon color="blue" @click="imprimirTicket(item)">
-              <v-icon>mdi-printer</v-icon>
-            </v-btn>
           </template>
         </v-data-table>
       </v-card>
@@ -72,19 +69,14 @@
 </template>
 
 <script>
-import moment from "moment";
-import Sale from "../../services/Sale";
+import { mapState } from "vuex";
 
 //Mixins
-import { ticketManager } from "../../mixins/ticketManager";
 import { formatoTabla } from "../../mixins/formatoTabla";
 
 export default {
-  name: "pedidosCajeroComponent",
-  mixins: [ticketManager, formatoTabla],
-  mounted() {
-    this.init();
-  },
+  name: "pedidosAppComponent",
+  mixins: [formatoTabla],
   components: {
     moneyFormat: () =>
       import(/* webpackChunkName: "moneyFormat" */ "vue-money-format"),
@@ -112,38 +104,8 @@ export default {
     ],
     items: [],
   }),
-  methods: {
-    async init() {
-      this.loading = true;
-      await this.getPedidos();
-      this.loading = false;
-    },
-    async getPedidos() {
-      let token = localStorage.token;
-
-      try {
-        const { data, status } = await Sale.getSales(token);
-        console.log(data);
-        if (status == 200) this.items = data;
-      } catch (error) {
-        this.loading = false;
-        console.warn(error.response);
-      }
-    },
-    agregarPedido(pedido, items, isPizza) {
-      let item = {};
-      items.forEach((e) => {
-        item.cantidad = e.cantidad;
-        item.precio = e.precio;
-        item.nombre = e.nombre.toUpperCase();
-        if (isPizza) item.nombre = `${item.nombre} - ${e.tamanos[0].nombre}`;
-        if (isPizza) console.log(item);
-
-        pedido.push(item);
-      });
-
-      return pedido;
-    },
+  computed: {
+    ...mapState(["pedidosApp"]),
   },
 };
 </script>
