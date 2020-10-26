@@ -373,7 +373,7 @@ export const ticketManager = {
             style: 'currency',
             currency: 'MXN',
           }).format(total)}`,
-          75,
+          70,
           altura,
           { maxWidth: 70, align: 'right' }
         );
