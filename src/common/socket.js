@@ -35,8 +35,6 @@ export default class Socket {
       this.messageArrived(message);
     this.#mqttClient.onConnectionLost = (err) => this.connectionLost(err);
 
-    console.log(this.#mqttClient);
-
     this.instance = this;
     return this;
 
@@ -64,7 +62,6 @@ export default class Socket {
   }
 
   messageArrived(message) {
-    console.log(message);
     let topic = message.topic;
     const ordersMovil = `suPizza/${this.#enviroment}/pos/orders/movil`;
 
@@ -83,9 +80,7 @@ export default class Socket {
   }
 
   setIsFirst(value) {
-    console.log(this.#isFirst);
     this.#isFirst = value;
-    console.log(this.#isFirst);
   }
 
   getIsFirst() {
@@ -110,10 +105,30 @@ function managerOrdersMovil({ payloadString }) {
     pedidosAppManager(JSON.parse(payloadString));
     socket.setIsFirst(false);
   }
+
+  if (tipo === 'ELIMINAR_PEDIDO') {
+    eliminarPedidoManager(JSON.parse(payloadString));
+  }
+
+  if (tipo === 'CREA_PEDIDO') {
+    crearPedidoManager(JSON.parse(payloadString));
+  }
 }
 
 function pedidosAppManager({ pedidos }) {
   pedidos.forEach((e) => {
     store.state.pedidosApp.push(e);
   });
+}
+
+function eliminarPedidoManager({ pedido }) {
+  const index = store.state.pedidosApp.findIndex((e) => e._id == pedido);
+
+  if (index == -1) return;
+
+  store.state.pedidosApp.splice(index, 1);
+}
+
+function crearPedidoManager({ pedido }) {
+  store.state.pedidosApp.push(pedido);
 }
