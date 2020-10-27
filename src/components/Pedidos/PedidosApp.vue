@@ -54,6 +54,9 @@
             <v-btn icon color="cyan" @click="verDetallePedido(item)">
               <v-icon>mdi-file-table</v-icon>
             </v-btn>
+            <v-btn icon color="red" @click="aceptarPedido(item)">
+              <v-icon>mdi-checkbox-marked</v-icon>
+            </v-btn>
           </template>
         </v-data-table>
       </v-card>
@@ -65,6 +68,10 @@
       :pedido="pedido"
       @cancel="showDetail = false"
     />
+
+    <v-overlay :value="overlay" z-index="99">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-row>
 </template>
 
@@ -73,6 +80,9 @@ import { mapState } from "vuex";
 
 //Mixins
 import { formatoTabla } from "../../mixins/formatoTabla";
+
+//Servicios
+import SaleApp from "../../services/SaleApp";
 
 export default {
   name: "pedidosAppComponent",
@@ -84,6 +94,7 @@ export default {
   },
   data: () => ({
     pedido: {},
+    overlay: false,
     showDetail: false,
     loading: false,
     search: "",
@@ -104,6 +115,20 @@ export default {
     ],
     items: [],
   }),
+  methods: {
+    async aceptarPedido({ _id }) {
+      const token = localStorage.token;
+      this.overlay = true;
+      try {
+        const response = await SaleApp.toAccept(token, _id);
+        console.log(response);
+      } catch (error) {
+        console.warn(error.response);
+      } finally {
+        this.overlay = false;
+      }
+    },
+  },
   computed: {
     ...mapState(["pedidosApp"]),
   },
