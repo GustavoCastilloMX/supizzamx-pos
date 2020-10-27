@@ -13,6 +13,7 @@
     "jspdf": "^2.1.0",
     "moment": "^2.27.0",
     "mqtt": "^4.2.1",
+    "qrcode-generator": "^1.4.4",
     "roboto-fontface": "*",
     "vue": "^2.6.11",
     "vue-money-format": "^1.2.1",

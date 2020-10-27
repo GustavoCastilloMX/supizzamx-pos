@@ -203,7 +203,14 @@ export const ticketManager = {
       doc.line(5, altura, 75, altura);
       altura += 2;
 
-      doc.addImage(await image.qrBase64, 'jpg', 20, altura, 40, 40);
+      //CODIGO QR
+      const x = require('qrcode-generator')(12, 'H');
+      x.addData(item._id);
+      x.make();
+      console.log(x.createDataURL());
+      let qr = x.createDataURL();
+      // doc.addImage(await image.qrBase64, 'jpg', 20, altura, 40, 40);
+      doc.addImage(qr, 'gif', 20, altura, 40, 40);
       altura += 48;
 
       // Folio
