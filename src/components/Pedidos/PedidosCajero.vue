@@ -123,7 +123,6 @@ export default {
 
       try {
         const { data, status } = await Sale.getSales(token);
-        console.log(data);
         if (status == 200) this.items = data;
       } catch (error) {
         this.loading = false;

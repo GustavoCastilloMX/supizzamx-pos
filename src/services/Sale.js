@@ -8,7 +8,7 @@ export default {
   },
 
   async getSales(token) {
-    return await Service.get('pedidos', {
+    return await Service.get('pedidos_cajero', {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
