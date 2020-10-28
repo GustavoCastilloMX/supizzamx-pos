@@ -20,14 +20,14 @@ export const ticketManager = {
       // Dirección
       doc.setFontSize(10);
       doc.setFont(font, 'bold');
-      doc.text('Av. Quinceo 387 Granjas del Maestro', 40, altura, {
+      doc.text('Av. Quinceo 387, Granjas del Maestro', 40, altura, {
         align: 'center',
         maxWidth: 70,
       });
       altura += 5;
 
       // Ciudad
-      doc.text('Morelia, Michoacán C.P. 58110', 40, altura, {
+      doc.text('Morelia, Michoacán. C.P. 58110', 40, altura, {
         align: 'center',
         maxWidth: 70,
       });
@@ -57,7 +57,7 @@ export const ticketManager = {
       });
       altura += 5;
 
-      doc.text(`RFC HERA860715QZ7`, 40, altura, {
+      doc.text(`RFC: HERA860715QZ7`, 40, altura, {
         align: 'center',
         maxWidth: 70,
       });
