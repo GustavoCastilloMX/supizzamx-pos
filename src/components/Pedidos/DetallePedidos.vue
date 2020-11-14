@@ -45,9 +45,7 @@
               <v-col cols="12" class="pb-0 mb-0 mt-0">
                 <strong>Forma de pago:</strong>
               </v-col>
-              <v-col cols="12" class="pt-0">
-                {{pedido.forma_pago}}
-              </v-col>
+              <v-col cols="12" class="pt-0">{{pedido.forma_pago}}</v-col>
             </v-row>
           </v-col>
           <v-col cols="4" class="pt-0 pb-0">
@@ -55,9 +53,7 @@
               <v-col cols="12" class="pb-0 mb-0 mt-0">
                 <strong>Entrega:</strong>
               </v-col>
-              <v-col cols="12" class="pt-0">
-                {{pedido.entrega}}
-              </v-col>
+              <v-col cols="12" class="pt-0">{{pedido.entrega}}</v-col>
             </v-row>
           </v-col>
           <v-col cols="4" class="pt-0 pb-0">
@@ -65,9 +61,7 @@
               <v-col cols="12" class="pb-0 mb-0 mt-0">
                 <strong>Status:</strong>
               </v-col>
-              <v-col cols="12" class="pt-0">
-                {{pedido.status}}
-              </v-col>
+              <v-col cols="12" class="pt-0">{{pedido.status}}</v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -201,7 +195,9 @@ export default {
       this.$emit("cancel");
     },
     getFolio(id) {
-      return id.slice(-6);
+      if (id != undefined) {
+        return id.slice(-6);
+      }
     },
     getFecha(fecha) {
       let newLocale = "es";
