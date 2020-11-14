@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { ifAuthenticated } from '../libs/Auth';
-import Home from '../views/Home.vue';
 
 //Vistas
 import Home from '../views/Home.vue';
