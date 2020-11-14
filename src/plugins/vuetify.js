@@ -11,12 +11,13 @@ export default new Vuetify({
     },
     themes: {
       light: {
-        rojoSupizza: '#c02830',
+        rojoSupizza: '#018143',
         primary: '#4CAF50',
-        secondary: '#424242',
+        secondary: '#FF8800',
         accent: '#82B1FF',
         error: '#FF5252',
         info: '#2196F3',
+        red2: '#CF030F',
         success: '#4CAF50',
         warning: '#FFC107',
       },

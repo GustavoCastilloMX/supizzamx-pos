@@ -27,16 +27,24 @@
           <template v-if="items.length > 0" v-slot:item.folio="{ item }">{{getFolio(item._id)}}</template>
 
           <!-- TEMPLATE FECHA -->
-          <template v-slot:item.fecha="{ item }">{{getFecha(item.fecha)}}</template>
+          <template v-slot:item.fecha="{ item }">{{
+            getFecha(item.fecha)
+          }}</template>
 
           <!-- TEMPLATE PAGADO -->
           <template v-slot:item.pagado="{ item }">
-            <v-chip label :color="item.pagado ? 'green' : 'red'" dark>{{item.pagado ? 'Sí' : 'No'}}</v-chip>
+            <v-chip label :color="item.pagado ? 'green' : 'red'" dark>{{
+              item.pagado ? "Sí" : "No"
+            }}</v-chip>
           </template>
 
           <!-- TEMPLATE TOTAL -->
           <template v-slot:item.total="{ item }">
-            <moneyFormat :value="item.total" locale="es-MX" currency-code="MXN"></moneyFormat>
+            <moneyFormat
+              :value="item.total"
+              locale="es-MX"
+              currency-code="MXN"
+            ></moneyFormat>
           </template>
 
           <!-- TEMPLATE TOTAL -->
@@ -52,18 +60,26 @@
       </v-card>
     </v-col>
 
-    <detallePedido :showDetail="showDetail" :pedido="pedido" @cancel="showDetail = false" />
+    <detallePedido
+      v-if="showDetail"
+      :showDetail="showDetail"
+      :pedido="pedido"
+      @cancel="showDetail = false"
+    />
   </v-row>
 </template>
 
 <script>
-import jsPDF from "jspdf";
 import moment from "moment";
 import Sale from "../../services/Sale";
-import image from "../../services/logo";
+
+//Mixins
+import { ticketManager } from "../../mixins/ticketManager";
+import { formatoTabla } from "../../mixins/formatoTabla";
 
 export default {
   name: "pedidosCajeroComponent",
+  mixins: [ticketManager, formatoTabla],
   mounted() {
     this.init();
   },

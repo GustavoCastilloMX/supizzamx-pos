@@ -8,14 +8,14 @@
         <v-btn color="rojoSupizza" depressed @click="cancel">Cancelar</v-btn>
       </v-toolbar>
       <v-card-text>
-        <v-row>
+        <v-row class="justify-center">
           <v-col cols="2" v-for="item in items" :key="item._id">
-            <v-card color="indigo darken-4" dark @click="setPizza(item)">
+            <v-card color="rojoSupizza darken-4" dark @click="setPizza(item)">
               <v-img
                 :src="item.urlImg.very_small"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,.7)"
-                height="120"
+                height="170"
               >
                 <h2 class="pa-2 font-weight-medium text-subtitle-2">{{item.nombre}}</h2>
               </v-img>

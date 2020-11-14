@@ -1,8 +1,11 @@
 <template>
   <v-app>
     <v-main class="grey lighten-4">
-      <AppBar />
-      <NavigationDrawer />
+      <div v-if="$route.name != 'Login'">
+        <AppBar />
+        <NavigationDrawer />
+      </div>
+
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -22,10 +25,6 @@ export default {
         /* webpackChunkName: "NavigationDrawerComponent" */ "./components/Menu/NavigationDrawer"
       ),
   },
-
-  data: () => ({
-    //
-  }),
 };
 </script>
 

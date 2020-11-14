@@ -9,7 +9,7 @@
       <v-container>
         <v-row>
           <v-col cols="6">
-            <v-card class="pa-5 indigo" @click="pagar('Efectivo')">
+            <v-card class="pa-5 rojoSupizza" @click="pagar('Efectivo')">
               <v-row class="d-flex justify-center align-center">
                 <v-col cols="5">
                   <v-avatar tile size="80">
@@ -25,7 +25,7 @@
             </v-card>
           </v-col>
           <v-col cols="6">
-            <v-card class="pa-5 indigo" @click="pagar('Tarjeta')">
+            <v-card class="pa-5 rojoSupizza" @click="pagar('Tarjeta')">
               <v-row class="d-flex justify-center align-center">
                 <v-col cols="5">
                   <v-avatar tile size="80">
@@ -42,7 +42,7 @@
           </v-col>
           <!-- Pendiente de pago -->
           <v-col cols="6">
-            <v-card class="pa-5 indigo" @click="pagar('Pago pendiente')">
+            <v-card class="pa-5 rojoSupizza" @click="pagar('Pago pendiente')">
               <v-row class="d-flex justify-center align-center">
                 <v-col cols="5">
                   <v-avatar tile size="80">
@@ -58,7 +58,7 @@
             </v-card>
           </v-col>
           <v-col cols="6">
-            <v-card class="pa-5 indigo" @click="pagar('Cortesia Empleado')">
+            <v-card class="pa-5 rojoSupizza" @click="pagar('Cortesia Empleado')">
               <v-row class="d-flex justify-center align-center">
                 <v-col cols="5">
                   <v-avatar tile size="80">
@@ -74,7 +74,7 @@
             </v-card>
           </v-col>
           <v-col cols="6">
-            <v-card class="pa-5 indigo" @click="pagar('Cortesia')">
+            <v-card class="pa-5 rojoSupizza" @click="pagar('Cortesia')">
               <v-row class="d-flex justify-center align-center">
                 <v-col cols="5">
                   <v-avatar tile size="80">

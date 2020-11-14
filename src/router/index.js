@@ -3,6 +3,9 @@ import VueRouter from 'vue-router';
 import { ifAuthenticated } from '../libs/Auth';
 import Home from '../views/Home.vue';
 
+//Vistas
+import Home from '../views/Home.vue';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -25,6 +28,13 @@ const routes = [
     name: 'Pedidos',
     component: () =>
       import(/* webpackChunkName: "pedidos" */ '../views/Pedidos.vue'),
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/pedidos-app',
+    name: 'PedidosApp',
+    component: () =>
+      import(/* webpackChunkName: "pedidosApp" */ '../views/PedidosApp.vue'),
     beforeEnter: ifAuthenticated,
   },
 ];
