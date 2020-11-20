@@ -20,12 +20,16 @@
           </v-col>
 
           <v-col cols="3">
-            <v-btn block depressed color="green" dark @click="showAdd = true">Agregar cliente</v-btn>
+            <v-btn block depressed color="green" dark @click="showAdd = true"
+              >Agregar cliente</v-btn
+            >
           </v-col>
         </v-row>
-        <v-data-table :headers="headers" :items="clients" :search="search" >
+        <v-data-table :headers="headers" :items="clients" :search="search">
           <template v-slot:item.seleccionar="{ item }">
-            <v-btn depressed color="green" @click="seleccionar(item)" dark>Seleccionar</v-btn>
+            <v-btn depressed color="green" @click="seleccionar(item)" dark
+              >Seleccionar</v-btn
+            >
           </template>
         </v-data-table>
       </v-card-text>
@@ -35,7 +39,11 @@
       </v-card-actions>
     </v-card>
 
-    <addClient :showAdd="showAdd" @cancel="showAdd = false" @saved="getAllClients" />
+    <addClient
+      :showAdd="showAdd"
+      @cancel="showAdd = false"
+      @saved="getAllClients"
+    />
 
     <selectAddress
       :showAddressClient="showAddressClient"
@@ -43,6 +51,16 @@
       @addressSelect="enviarDireccion"
       @cancel="showAddressClient = false"
     />
+
+    <addAddress
+      v-if="showAddAddress"
+      :showAddAddress="showAddAddress"
+      :idClient="idClient"
+      :isEdit="false"
+      @saved="direccionGuardada"
+      @cancel="showAddAddress = false"
+    />
+
     <v-overlay :value="overlay">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -50,14 +68,19 @@
 </template>
 
 <script>
+// Peticiones HTTP
 import Address from "../../services/Address";
 import Client from "../../services/Client";
+
+// Componentes
+import addAddress from "../Base/AddAddress";
 
 export default {
   name: "ClientComponent",
   components: {
     selectAddress: () => import("./selectAddress"),
     addClient: () => import("./AddClient"),
+    addAddress,
   },
   props: {
     showClient: {
@@ -68,6 +91,7 @@ export default {
   data: () => ({
     overlay: false,
     showAddressClient: false,
+    showAddAddress: false,
     headers: [
       {
         text: "Nombre(s)",
@@ -82,6 +106,7 @@ export default {
     showAdd: false,
     clients: [],
     client: {},
+    idClient: "",
   }),
   methods: {
     cancel() {
@@ -90,6 +115,11 @@ export default {
     async seleccionar(client) {
       let data = client;
       let direccionAux = await this.getAddress(client._id);
+
+      if (direccionAux.length < 1) {
+        this.idClient = client._id;
+        this.showAddAddress = true;
+      }
 
       if (direccionAux.length == 1) {
         data.direccion = direccionAux[0];
@@ -128,6 +158,16 @@ export default {
         this.showAdd = false;
         this.overlay = false;
       }
+    },
+    direccionGuardada() {
+      this.showAddAddress = false;
+      const index = this.clients.findIndex(
+        (client) => client._id == this.idClient
+      );
+
+      const client = this.clients[index];
+
+      this.seleccionar(client);
     },
   },
   watch: {
