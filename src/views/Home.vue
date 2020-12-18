@@ -515,12 +515,12 @@ export default {
       this.showSodasEdit = false;
     },
     async pay() {
-      if (this.data.entrega == "Domicilio") {
-        await this.getRepartidores();
-        this.showRepartidores = true;
+      // if (this.data.entrega == "Domicilio") {
+      //   await this.getRepartidores();
+      //   this.showRepartidores = true;
 
-        return true;
-      }
+      //   return true;
+      // }
 
       if (this.pedido.length <= 0) {
         this.mesajeError();
