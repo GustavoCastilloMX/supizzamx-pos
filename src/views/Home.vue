@@ -593,18 +593,26 @@ export default {
         data = await this.recuperarPedido(tipo, null, tipo, false);
       }
 
-      if (tipo != "Pago pendiente") {
+      if (tipo != "Pago pendiente" && this.data.entrega == "Sucursal") {
         data = await this.recuperarPedido("Completado", null, tipo, true);
       }
 
+      if (tipo != "Pago pendiente" && this.data.entrega == "Domicilio") {
+        data = await this.recuperarPedido("Aceptado", null, tipo, true);
+      }
+
+      console.log(data);
+
       // Rellenar el pedido
       this.pedido.forEach((e) => {
+        console.log(e);
         if (e.tipo == "pizza") data.pizzas.push(e);
         if (e.tipo == "promocion") data.promos.push(e);
         if (e.tipo == "bebida") data.bebidas.push(e);
         if (e.tipo == "complemento") data.complementos.push(e);
       });
 
+      console.log(data);
       this.enviarPago(data);
     },
     async enviarPago(pedido) {
