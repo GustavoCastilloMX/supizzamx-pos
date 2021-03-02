@@ -4,7 +4,7 @@
 
 # Su pizza pos
 
-Frontend del proyecto de su pizza pos. Un sistem el cual permite llevar a cabo pedido en sucursal o para llevar, ver los pedidos que se han hecho en la app, asi como asignar repartidores para los pedidos, y poder recibir pedidos vía telefónica.  También cuenta con opción de descuento a empleados,  entre otras formas de pago.
+Frontend del proyecto de su pizza pos. Un sistema el cual permite llevar a cabo pedido en sucursal o para llevar, ver los pedidos que se han hecho en la app, asi como asignar repartidores para los pedidos, y poder recibir pedidos vía telefónica.  También cuenta con opción de descuento a empleados,  entre otras formas de pago.
 
 
 ## Tecnologías
